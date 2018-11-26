@@ -3,17 +3,25 @@ import * as firebase from 'firebase'
 
 import Status from './Status'
 import Control from './Control'
+import {Paper}from '@material-ui/core'
+import { withStyles } from '@material-ui/core/styles';
+
 var config = require('../config/firebase_conf').firebase
-/*
-var config = {
-    apiKey: "AIzaSyCekjkHVtlbKDrEqJMqDatNRcAg920rld4",
-    authDomain: "termocloud-icapa.firebaseapp.com",
-    databaseURL: "https://termocloud-icapa.firebaseio.com",
-    projectId: "termocloud-icapa",
-    storageBucket: "termocloud-icapa.appspot.com",
-    messagingSenderId: "691857590336"
-  };
-*/
+
+
+const styles = theme => ({
+    root: {
+        ...theme.mixins.gutters(),
+        paddingTop: theme.spacing.unit * 2,
+        paddingBottom: theme.spacing.unit *2,
+        flex:1,
+        alignItems:'center'
+    },
+    separador:{
+        align:'center',
+        
+    }
+});
 
 firebase.initializeApp(config);
 
@@ -21,7 +29,8 @@ var nameRef = firebase.database().ref();
 var idRef = firebase.database().ref();
 var controlRef = firebase.database().ref();
 
-export default class Home extends React.Component {
+export default withStyles(styles)(
+class Home extends React.Component {
     constructor(){
         super()
         this.state = {
@@ -81,26 +90,22 @@ export default class Home extends React.Component {
 
 
     render(){
-        const style ={
-            display:'flex',
-            flex:1,
-            flexDirection:'column',
-            justifyContent:'center',
-            alignItems:'center'
-
-        }
-
+        
+        const {classes} = this.props;
         return (
 
 
-          <div>
+          <Paper className={classes.root} elevation={1}>
                 <Status estado={this.state.estado} />
+                <div className ={classes.separador}>
                 <Control control={this.state.control} 
                     onCambiaModo={this.onCambiaModo}
                     onCambiaTemperatura={this.onCambiaTemperatura}
                     />
-          </div>
+                </div>
+          </Paper>
 
         );
     }
 }
+)

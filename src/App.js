@@ -5,12 +5,24 @@ import Home from './Component/Home';
 import About from './Component/About';
 import Navigation from './Component/Navigation'
 
+import { withStyles } from '@material-ui/core/styles'
 
+const styles={
+  root: {
+    margin: 20,
+    padding: 20,
+    maxWidth:200
+  }
+}
+
+export default withStyles(styles)(
 class App extends Component {
   render() {
     return (
       <div>
+          {/*
           <Navigation/>
+          */}
            {/**
                  *  route to diffrent component
                  */}
@@ -20,5 +32,5 @@ class App extends Component {
     );
   }
 }
+)
 
-export default App;
