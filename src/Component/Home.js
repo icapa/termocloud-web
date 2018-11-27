@@ -3,7 +3,8 @@ import * as firebase from 'firebase'
 
 import Status from './Status'
 import Control from './Control'
-import {Paper}from '@material-ui/core'
+import SigIn from './SigIn'
+import {Paper, Typography}from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 
 var config = require('../config/firebase_conf').firebase
@@ -29,6 +30,10 @@ var nameRef = firebase.database().ref();
 var idRef = firebase.database().ref();
 var controlRef = firebase.database().ref();
 
+
+
+
+
 export default withStyles(styles)(
 class Home extends React.Component {
     constructor(){
@@ -40,12 +45,25 @@ class Home extends React.Component {
             id : {
             },
             control:{
+            },
+            user:{
             }
         }
         this.onCambiaModo = this.onCambiaModoFunc.bind(this);
         this.onCambiaTemperatura = this.onCambiaTemperaturaFunc.bind(this);
+        this.onSigIn = this.onSigInFunc.bind(this);
     }
-
+    
+    onSigInFunc(user,pass){
+        
+        firebase.auth().signInWithEmailAndPassword(user,pass).catch(function(error){
+            console("Mando auth y que sale??");
+            console.log(error);
+            alert(error.code);
+        });
+        
+    }
+    
     onCambiaTemperaturaFunc(temp){
         console.log("La temperatura quiere cambiar: "+temp);
         var refTemp = firebase.database().ref(this.state.serial+'/control/automatico/temperatura')
@@ -60,7 +78,22 @@ class Home extends React.Component {
         }
     }
 
+
     componentDidMount(){
+        
+        firebase.auth().onAuthStateChanged(user =>{
+            if (user){
+                console.log("Usuario autenticado!!!");
+                console.log(user.email);
+                this.setState({
+                    user: user
+                })
+            }else{
+                console.log("NOO AUTH");
+            }
+        });
+        
+
         nameRef.on('value',snapshot =>{
             console.log(Object.keys(snapshot.val())[0])
             this.setState({
@@ -88,24 +121,35 @@ class Home extends React.Component {
         })
     }
 
+    
 
     render(){
         
         const {classes} = this.props;
-        return (
 
-
-          <Paper className={classes.root} elevation={1}>
-                <Status estado={this.state.estado} />
-                <div className ={classes.separador}>
-                <Control control={this.state.control} 
-                    onCambiaModo={this.onCambiaModo}
-                    onCambiaTemperatura={this.onCambiaTemperatura}
-                    />
+        if (this.state.user.uid){
+            return (
+                <div>
+                <Typography variant='h6' align='center' gutterBottom>
+                    {this.state.user.email}
+                </Typography>
+                <Paper className={classes.root} elevation={1}>
+                    <div>
+                    <Status estado={this.state.estado} />
+                    </div>
+                    <div elevation={1}>
+                        <Control control={this.state.control} 
+                            onCambiaModo={this.onCambiaModo}
+                            onCambiaTemperatura={this.onCambiaTemperatura}/>
+                    </div>
+                </Paper>
                 </div>
-          </Paper>
-
-        );
+            );
+        }else{
+            return(
+                <SigIn onSigIn ={this.onSigIn} />
+            );
+        }
     }
 }
 )

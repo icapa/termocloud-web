@@ -15,6 +15,19 @@ const styles = theme => ({
     },
     texto:{
         maxWidth:100,
+    },
+    button: {
+        margin: theme.spacing.unit *1 ,
+        padding: theme.spacing.unit *2
+    },
+    listaBotones: {
+        display:'flex',
+        flex:1,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'center',
+        
+        
     }
 });
 
@@ -67,7 +80,7 @@ class Control extends React.Component {
         const {classes} = this.props;
         if (this.props.control.modo==="automatico"){
             return(
-                <div style={styles.main_div}>
+                <div className={classes.listaBotones}>
                 <IconButton variant="contained" onClick={()=>{this.sumaTemp()}}> 
                     <AddCircle/>
                 </IconButton>
@@ -92,32 +105,33 @@ class Control extends React.Component {
         var styleOn;
         var styleOff;
         var styleAuto;
+        const {classes}= this.props;
         if (this.props.control.modo==="on"){
             styleOn = "primary";
-            styleOff = "secundary";
-            styleAuto = "secundary";
+            styleOff = "secondary";
+            styleAuto = "secondary";
         }else if (this.props.control.modo==="off"){
-            styleOn = "secundary"
+            styleOn = "secondary"
             styleOff = "primary";
-            styleAuto = "secundary";
+            styleAuto = "secondary";
         }else if (this.props.control.modo==="automatico"){
-            styleOn = "secundary";
-            styleOff = "secundary";
+            styleOn = "secondary";
+            styleOff = "secondary";
             styleAuto = "primary";
         }
         return(
-            <div>
-                <Button variant="contained" color={styleOn} id="on"
+            <div className={classes.listaBotones}>
+                <Button variant="contained" color={styleOn} classaName={classes.button} 
                     onClick={()=>{this.onChange("on");}}
                 >
                     On
                 </Button>
-                <Button variant="contained" color={styleOff} 
+                <Button variant="contained" color={styleOff} classaName={classes.button}
                     onClick={()=>{this.onChange("off");}}
                 >
                     Off
                 </Button>
-                <Button variant="contained" color={styleAuto} 
+                <Button variant="contained" color={styleAuto} classaName={classes.button}
                     onClick={()=>{this.onChange("automatico");}}
                 >
                     Automatico
@@ -128,16 +142,14 @@ class Control extends React.Component {
 
 
     render(){
-       
-       
-        
         const {classes} = this.props;
-        
         return(
+            <div>
             <Paper className={classes.root}>
                 {this.renderBotones()}
                 {this.renderInput()}
             </Paper>
+            </div>
         );
     }
 }
