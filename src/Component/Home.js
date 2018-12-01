@@ -1,10 +1,9 @@
 import React from 'react';
 import * as firebase from 'firebase'
-
 import Status from './Status'
 import Control from './Control'
 import SigIn from './SigIn'
-import {Paper, Typography}from '@material-ui/core'
+import { Typography}from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 
 var config = require('../config/firebase_conf').firebase
@@ -29,7 +28,7 @@ firebase.initializeApp(config);
 var nameRef = firebase.database().ref();
 var idRef = firebase.database().ref();
 var controlRef = firebase.database().ref();
-
+var estadoRef=firebase.database().ref();
 
 
 
@@ -91,23 +90,24 @@ class Home extends React.Component {
             
             
                 nameRef.on('value',snapshot =>{
+                   
                     console.log(Object.keys(snapshot.val())[0])
                     this.setState({
                         serial: Object.keys(snapshot.val())[0]
                     })
-                    nameRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/'+'estado')
-                    nameRef.on('value',snapshot =>{
+                    estadoRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/estado')
+                    estadoRef.on('value',snapshot =>{
                         this.setState({
                             estado: snapshot.val()
                         })
                     })
-                    idRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/'+'id')
+                    idRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/id')
                     idRef.on('value',snapshot =>{
                         this.setState({
                             id: snapshot.val()
                         })
                     })
-                    controlRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/'+'control')
+                    controlRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/control')
                     controlRef.on('value',snapshot =>{
                         this.setState({
                             control: snapshot.val()
@@ -122,24 +122,24 @@ class Home extends React.Component {
 
     render(){
         
-        const {classes} = this.props;
-
+        
         if (this.state.user.uid){
             return (
+                
                 <div>
                 <Typography variant='h6' align='center' gutterBottom>
                     {this.state.user.email}
                 </Typography>
-                <Paper className={classes.root} elevation={1}>
+                <div>
                     <div>
                     <Status estado={this.state.estado} />
                     </div>
-                    <div elevation={1}>
+                    <div>
                         <Control control={this.state.control} estado={this.state.estado} 
                             onCambiaModo={this.onCambiaModo}
                             onCambiaTemperatura={this.onCambiaTemperatura}/>
                     </div>
-                </Paper>
+                </div>
                 </div>
             );
         }else{

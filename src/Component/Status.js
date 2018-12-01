@@ -1,5 +1,5 @@
 import React from 'react';
-import {Typography, Paper}from '@material-ui/core'
+import {Typography}from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 
 
@@ -16,20 +16,33 @@ const styles = theme => ({
 
 class Status extends React.Component {
     renderFecha(){
-        let fechaOrig = this.props.estado.fecha
-        if (fechaOrig){
-            var partes = fechaOrig.split("T");
-            var hora = partes[1].split("+")
-            return (partes[0] + ' ' + hora[0])
+        if (this.props.estado){
+            let fechaOrig = this.props.estado.fecha
+            if (fechaOrig){
+                var partes = fechaOrig.split("T");
+                var hora = partes[1].split("+")
+                return (partes[0] + ' ' + hora[0])
+            }
         }
-       
     }
     renderImagen(){
-        if (this.props.estado.encendido===1){
-            return "fuego.gif"
-        }else{
-            return "fuego_apagado.gif"
+        if (this.props.estado){
+            if (this.props.estado.encendido===1){
+                return "fuego.gif"
+            }else{
+                return "fuego_apagado.gif"
+            }
         }
+    }
+    renderTemperatura(){
+        if (this.props.estado){
+            if (this.props.estado.temperatura)
+                return this.props.estado.temperatura+' ºC';
+            else
+                return '';
+            
+        }
+        return ''
     }
     render(){
         
@@ -41,7 +54,7 @@ class Status extends React.Component {
                 <center><img width="100" height="100" alt="" className={classes.imagen} src={this.renderImagen()} /></center>
                 
                 <Typography variant='display1' align='center' gutterBottom>
-                    {this.props.estado.temperatura}ºC
+                    {this.renderTemperatura()}
                 </Typography>
                 {/*
                 <Typography variant='h5' align='center' gutterBottom>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button , IconButton, Typography,Paper}from '@material-ui/core'
+import {Button , IconButton, Typography}from '@material-ui/core'
 import AddCircle from '@material-ui/icons/AddCircle'
 import RemoveCircle from '@material-ui/icons/RemoveCircle'
 import { withStyles } from '@material-ui/core/styles';
@@ -25,7 +25,7 @@ const styles = theme => ({
         flex:1,
         flexDirection:'row',
         alignItems:'center',
-        justifyContent:'space-between',
+        justifyContent:'space-around',
         margin: theme.spacing.unit *0.5 ,
         padding: theme.spacing.unit *0.5
     },
@@ -34,7 +34,7 @@ const styles = theme => ({
         flex:1,
         flexDirection:'row',
         alignItems:'center',
-        justifyContent:'space-between',
+        justifyContent:'center',
         margin: theme.spacing.unit*0.5  ,
         padding: theme.spacing.unit *0.5
     },
@@ -49,8 +49,6 @@ const styles = theme => ({
 
 class Control extends React.Component {
     constructor(props){
-        console.log('los putos props');
-        console.log(props)
         super(props)
         this.state = {
             //temperatura: Object.values(props.control.automatico)[0]
@@ -58,6 +56,7 @@ class Control extends React.Component {
         }
     }
     componentWillReceiveProps(props){
+        if (!props.control) return;
         if (props.control.automatico){
             this.setState({
                 /*temperatura:Object.values(props.control.automatico)[0]*/
@@ -85,7 +84,7 @@ class Control extends React.Component {
     }
    
     onChange(params) {
-        console.log(params);
+        
         
         if (this.props.onCambiaModo){
             this.props.onCambiaModo(params);
@@ -94,6 +93,7 @@ class Control extends React.Component {
     }
 
     renderInput(){
+        if (!this.props.control) return;
         const {classes} = this.props;
         if (this.props.control.modo==="automatico"){
             return(
@@ -101,16 +101,7 @@ class Control extends React.Component {
                 <IconButton variant="contained" onClick={()=>{this.sumaTemp()}}> 
                     <AddCircle/>
                 </IconButton>
-                {/*
-                <TextField
-                    className={classes.texto}
-                    id="outlined-adornment-weight"
-                    variant="outlined"
-                    value={this.state.temperatura}
-                    textAlign="center"
-                />
-                */}
-                <Typography variant='display2' align='center' gutterBottom>
+                <Typography variant='display1' align='center' gutterBottom>
                     {this.state.temperatura} ºC  
                 </Typography>
                 <IconButton variant="contained" onClick={()=>{this.restaTemp()}}> 
@@ -126,18 +117,19 @@ class Control extends React.Component {
         var styleOn;
         var styleOff;
         var styleAuto;
+        if (!this.props.control) return;
         const {classes}= this.props;
         if (this.props.control.modo==="on"){
             styleOn = "primary";
-            styleOff = "disabled";
-            styleAuto = "disabled";
+            styleOff = "default";
+            styleAuto = "default";
         }else if (this.props.control.modo==="off"){
-            styleOn = "disabled"
+            styleOn = "default"
             styleOff = "primary";
-            styleAuto = "disabled";
+            styleAuto = "default";
         }else if (this.props.control.modo==="automatico"){
-            styleOn = "disabled";
-            styleOff = "disabled";
+            styleOn = "default";
+            styleOff = "default";
             styleAuto = "primary";
         }
         return(
@@ -155,7 +147,7 @@ class Control extends React.Component {
                 <Button variant="contained" color={styleAuto} className={classes.button}
                     onClick={()=>{this.onChange("automatico");}}
                 >
-                    Automatico
+                    Auto
                 </Button>
             </div>
         );
@@ -166,12 +158,12 @@ class Control extends React.Component {
         const {classes} = this.props;
         return(
             <div>
-            <Paper className={classes.root}>
-            <div className="contenedor">
+            
+            <div className={classes.contenedor}>
                 {this.renderBotones()}
                 {this.renderInput()}
             </div>
-            </Paper>
+            
             </div>
         );
     }
