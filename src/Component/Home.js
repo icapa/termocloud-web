@@ -88,40 +88,37 @@ class Home extends React.Component {
                 this.setState({
                     user: user
                 })
-            }else{
-                console.log("NOO AUTH");
-            }
-        });
-        
-
-        nameRef.on('value',snapshot =>{
-            console.log(Object.keys(snapshot.val())[0])
-            this.setState({
-                serial: Object.keys(snapshot.val())[0]
-            })
-            nameRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/'+'estado')
-            nameRef.on('value',snapshot =>{
-                this.setState({
-                    estado: snapshot.val()
+            
+            
+                nameRef.on('value',snapshot =>{
+                    console.log(Object.keys(snapshot.val())[0])
+                    this.setState({
+                        serial: Object.keys(snapshot.val())[0]
+                    })
+                    nameRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/'+'estado')
+                    nameRef.on('value',snapshot =>{
+                        this.setState({
+                            estado: snapshot.val()
+                        })
+                    })
+                    idRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/'+'id')
+                    idRef.on('value',snapshot =>{
+                        this.setState({
+                            id: snapshot.val()
+                        })
+                    })
+                    controlRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/'+'control')
+                    controlRef.on('value',snapshot =>{
+                        this.setState({
+                            control: snapshot.val()
+                        })
+                    })
                 })
-            })
-            idRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/'+'id')
-            idRef.on('value',snapshot =>{
-                this.setState({
-                    id: snapshot.val()
-                })
-            })
-            controlRef = firebase.database().ref(Object.keys(snapshot.val())[0]+'/'+'control')
-            controlRef.on('value',snapshot =>{
-                this.setState({
-                    control: snapshot.val()
-                })
-
-            })
+            } 
         })
     }
 
-    
+        
 
     render(){
         
@@ -138,7 +135,7 @@ class Home extends React.Component {
                     <Status estado={this.state.estado} />
                     </div>
                     <div elevation={1}>
-                        <Control control={this.state.control} 
+                        <Control control={this.state.control} estado={this.state.estado} 
                             onCambiaModo={this.onCambiaModo}
                             onCambiaTemperatura={this.onCambiaTemperatura}/>
                     </div>

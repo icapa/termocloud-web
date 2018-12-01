@@ -9,6 +9,9 @@ const styles = theme => ({
         paddingTop: theme.spacing.unit * 2,
         paddingBottom: theme.spacing.unit *2,
     },
+    imagen:{
+        borderRadius:50
+    }
 });
 
 class Status extends React.Component {
@@ -34,19 +37,21 @@ class Status extends React.Component {
         return(
             
             <div>
-                <Paper className={classes.root}>
-                <center><img width="100" height="100" alt="" src={this.renderImagen()} /></center>
+                
+                <center><img width="100" height="100" alt="" className={classes.imagen} src={this.renderImagen()} /></center>
                 
                 <Typography variant='display1' align='center' gutterBottom>
                     {this.props.estado.temperatura}ºC
                 </Typography>
+                {/*
                 <Typography variant='h5' align='center' gutterBottom>
                     {this.props.estado.temperaturaObjetivo}ºC
                 </Typography>
+                */}
                 <Typography variant='h6' align='center' gutterBottom>
                     {this.renderFecha()}
                 </Typography>
-                </Paper>
+                
             </div>
         );
     }

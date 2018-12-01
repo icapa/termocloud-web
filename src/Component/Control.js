@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button , IconButton, TextField,Paper}from '@material-ui/core'
+import {Button , IconButton, Typography,Paper}from '@material-ui/core'
 import AddCircle from '@material-ui/icons/AddCircle'
 import RemoveCircle from '@material-ui/icons/RemoveCircle'
 import { withStyles } from '@material-ui/core/styles';
@@ -14,20 +14,36 @@ const styles = theme => ({
         alignItems:'center'
     },
     texto:{
-        maxWidth:100,
+        maxWidth:70,
     },
     button: {
-        margin: theme.spacing.unit *1 ,
-        padding: theme.spacing.unit *2
+      
+        
     },
     listaBotones: {
         display:'flex',
         flex:1,
         flexDirection:'row',
         alignItems:'center',
-        justifyContent:'center',
-        
-        
+        justifyContent:'space-between',
+        margin: theme.spacing.unit *0.5 ,
+        padding: theme.spacing.unit *0.5
+    },
+    controlTemp:{
+        display:'flex',
+        flex:1,
+        flexDirection:'row',
+        alignItems:'center',
+        justifyContent:'space-between',
+        margin: theme.spacing.unit*0.5  ,
+        padding: theme.spacing.unit *0.5
+    },
+    contenedor:{
+        flex:1,
+        flexDirection:'row',
+        alignItems:'center',
+        margin: theme.spacing.unit*0.5,
+        padding: '20px'
     }
 });
 
@@ -44,7 +60,8 @@ class Control extends React.Component {
     componentWillReceiveProps(props){
         if (props.control.automatico){
             this.setState({
-                temperatura:Object.values(props.control.automatico)[0]
+                /*temperatura:Object.values(props.control.automatico)[0]*/
+                temperatura: props.estado.temperaturaObjetivo
             })
         }
     }
@@ -80,18 +97,22 @@ class Control extends React.Component {
         const {classes} = this.props;
         if (this.props.control.modo==="automatico"){
             return(
-                <div className={classes.listaBotones}>
+                <div className={classes.controlTemp}>
                 <IconButton variant="contained" onClick={()=>{this.sumaTemp()}}> 
                     <AddCircle/>
                 </IconButton>
+                {/*
                 <TextField
                     className={classes.texto}
                     id="outlined-adornment-weight"
                     variant="outlined"
                     value={this.state.temperatura}
-                    width="50"
                     textAlign="center"
                 />
+                */}
+                <Typography variant='display2' align='center' gutterBottom>
+                    {this.state.temperatura} ºC  
+                </Typography>
                 <IconButton variant="contained" onClick={()=>{this.restaTemp()}}> 
                     <RemoveCircle/>
                 </IconButton>
@@ -108,30 +129,30 @@ class Control extends React.Component {
         const {classes}= this.props;
         if (this.props.control.modo==="on"){
             styleOn = "primary";
-            styleOff = "secondary";
-            styleAuto = "secondary";
+            styleOff = "disabled";
+            styleAuto = "disabled";
         }else if (this.props.control.modo==="off"){
-            styleOn = "secondary"
+            styleOn = "disabled"
             styleOff = "primary";
-            styleAuto = "secondary";
+            styleAuto = "disabled";
         }else if (this.props.control.modo==="automatico"){
-            styleOn = "secondary";
-            styleOff = "secondary";
+            styleOn = "disabled";
+            styleOff = "disabled";
             styleAuto = "primary";
         }
         return(
             <div className={classes.listaBotones}>
-                <Button variant="contained" color={styleOn} classaName={classes.button} 
+                <Button variant="contained" color={styleOn} className={classes.button }
                     onClick={()=>{this.onChange("on");}}
                 >
                     On
                 </Button>
-                <Button variant="contained" color={styleOff} classaName={classes.button}
+                <Button variant="contained" color={styleOff} className={classes.button}
                     onClick={()=>{this.onChange("off");}}
                 >
                     Off
                 </Button>
-                <Button variant="contained" color={styleAuto} classaName={classes.button}
+                <Button variant="contained" color={styleAuto} className={classes.button}
                     onClick={()=>{this.onChange("automatico");}}
                 >
                     Automatico
@@ -146,8 +167,10 @@ class Control extends React.Component {
         return(
             <div>
             <Paper className={classes.root}>
+            <div className="contenedor">
                 {this.renderBotones()}
                 {this.renderInput()}
+            </div>
             </Paper>
             </div>
         );
