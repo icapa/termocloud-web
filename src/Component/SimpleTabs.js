@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 
 /* Los componentes */
 import Home from './Home'
-import CeldaConf from './CeldaConf'
+import Conf from './Conf'
 
 function TabContainer(props) {
   return (
@@ -53,8 +53,8 @@ class SimpleTabs extends React.Component {
             <Tab label="Registros" />
           </Tabs>
         </AppBar>
-        {value === 0 && <TabContainer>{/*<Home/>*/}<CeldaConf /></TabContainer>}
-        {value === 1 && <TabContainer><CeldaConf /></TabContainer>}
+        {value === 0 && <TabContainer>{/*<Home/>*/}<Conf /></TabContainer>}
+        {value === 1 && <TabContainer><Conf /></TabContainer>}
         {value === 2 && <TabContainer>Item Three</TabContainer>}
       </div>
     );
