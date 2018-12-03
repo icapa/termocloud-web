@@ -100,7 +100,9 @@ class CeldaConf extends React.Component {
         )
         event.preventDefault();
         if (this.props.onSubmit){
-            this.props.onSubmit(this.state);
+            var enviarEstado = this.state;
+            delete enviarEstado.pintaAceptar;
+            this.props.onSubmit(enviarEstado);
         }
     }
     handleSelect = (event) => {
@@ -265,14 +267,9 @@ class CeldaConf extends React.Component {
             </div>
         );
     }
-}
-
-
-
-
-    
+}    
 CeldaConf.propTypes = {
-    id: PropTypes.number.isRequired
+    id: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(CeldaConf);
