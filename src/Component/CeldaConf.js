@@ -45,25 +45,33 @@ const styles = theme => ({
 class CeldaConf extends React.Component {
     constructor(props){
         super(props)
+        var aux = this.props.estado;
         this.state = {
             //temperatura: Object.values(props.control.automatico)[0]
-            id: this.props.id,
-            hh_ii:"00:00",
-            hh_ff:"23:59",
-            estadoForm:"off",      
-            L:false,
-            M:false,
-            X:false,
-            J:false,
-            V:false,
-            S:false,
-            D:false,
-            temperatura: 20,
-            enabled: false,
-            pintaAceptar: false
+            id: aux.id,
+            hh_ii:aux.hh_ii,
+            hh_ff:aux.hh_ff,
+            estadoForm:aux.estadoForm,      
+            L:aux.L,
+            M:aux.M,
+            X:aux.X,
+            J:aux.J,
+            V:aux.V,
+            S:aux.S,
+            D:aux.D,
+            temperatura: aux.temperatura,
+            enabled: aux.enabled,
+                      
         }
-        
     }
+    
+    handleTemperatura=event=>{
+        this.setState({
+            temperatura:event.target.value,
+            pintaAceptar:true
+        })
+    }
+    
     handleDelete= () =>{
         if (this.props.onDelete){
             this.props.onDelete(this.state.id);
@@ -78,41 +86,40 @@ class CeldaConf extends React.Component {
     }
     handleTime = name => event =>{
         
-        this.setState({
+        this.setState({ 
+            pintaAceptar:true,
             [name]: event.target.value,
-            pintaAceptar:true
-            }
-        )
+        })
     }
 
     handleCheck = name => event =>{
-        this.pintaAceptar=true;
         this.setState({
             [name]: event.target.checked,
-            pintaAceptar:true
-            }
-        )
+            pintaAceptar:true,
+        }) 
     }
 
     handleEvent  = (event) =>{
-        this.setState(
-            {pintaAceptar:false}
-        )
         event.preventDefault();
+        this.setState({
+            pintaAceptar: false
+        }
+        )
         if (this.props.onSubmit){
             var enviarEstado = this.state;
             delete enviarEstado.pintaAceptar;
             this.props.onSubmit(enviarEstado);
         }
     }
-    handleSelect = (event) => {
-        this.pintaAceptar=true;
+    handleSelect = (event) => {  
         this.setState({
-            estadoForm: event.target.value
-        })
+            estadoForm: event.target.value,
+            pintaAceptar: true
+        }) 
         
     }
-    renderButton(){
+
+    renderButton(){ 
         if (this.state.pintaAceptar===true){
             return(
                 <Button
@@ -227,9 +234,10 @@ class CeldaConf extends React.Component {
                     <TextField
                         id="time"
                         label="Temp"
-                        maxlenght="2"
+                        maxlenght="3"
                         type="number"
                         name="temperatura"
+                        onChange={this.handleTemperatura}
                         defaultValue={this.state.temperatura}
                         className={classes.textoTemp}
                         InputLabelProps={{
@@ -251,12 +259,14 @@ class CeldaConf extends React.Component {
                         >Aceptar</Button>
                         */}
                         {this.renderButton()}
+                        
                         <Switch
                             checked={this.state.enabled}
                             onChange={this.handleEnable}
                             name="enable"
                             color="primary"
                         />
+                        
                         <IconButton variant="contained" onClick={this.handleDelete}> 
                             <Delete/>
                         </IconButton>
@@ -269,7 +279,7 @@ class CeldaConf extends React.Component {
     }
 }    
 CeldaConf.propTypes = {
-    id: PropTypes.string.isRequired
+    estado: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(CeldaConf);

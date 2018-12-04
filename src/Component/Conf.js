@@ -27,7 +27,7 @@ const styles = theme => ({
 
 class Conf extends React.Component {
     constructor(props){
-        
+       
         super(props)
        
         this.state = {
@@ -114,7 +114,9 @@ class Conf extends React.Component {
                     {this.state.registros.map((c,index) => 
                 
                         <div className={colorCelda.colores[index%2].clase} key={index.toString()}>
-                            <CeldaConf id={c.id}
+                            <CeldaConf 
+                                id={c.id}
+                                estado={this.state.registros[index]}
                                 onSubmit = {this.onSubmitConf}
                                 onDelete = {this.onSubmitDelete}
                             />

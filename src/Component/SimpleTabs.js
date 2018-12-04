@@ -44,7 +44,7 @@ class SimpleTabs extends React.Component {
     var cloud = new Cloud();
     this.state = {
       value: 0,
-      user:null,
+      user:-1,
       cloud: cloud
 
     }
@@ -94,14 +94,15 @@ class SimpleTabs extends React.Component {
             <Tab label="Registros" />
           </Tabs>
         </AppBar>
-        {value === 0 && <TabContainer>{/*<Home/>*/}<Conf bbdd={this.state.cloud}/></TabContainer>}
-        {value === 1 && <TabContainer><Conf  /></TabContainer>}
+        {value === 0 && <TabContainer><Home bbdd={this.state.cloud}/></TabContainer>}
+        {value === 1 && <TabContainer><Conf bbdd={this.state.cloud}/></TabContainer>}
         {value === 2 && <TabContainer>Item Three</TabContainer>}
       </div>
     );
   }
 
   render() {
+    console.log(this.state.user);
     if (this.state.user){
       return(this.renderTabs());
     }
