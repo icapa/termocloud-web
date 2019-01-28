@@ -49,10 +49,12 @@ const styles = theme => ({
 
 class Control extends React.Component {
     constructor(props){
+        console.log("Control: Props");
+        console.log(props);
         super(props)
         this.state = {
             //temperatura: Object.values(props.control.automatico)[0]
-            temperatura: 20
+            temperatura: props.estado.temperaturaObjetivo
         }
     }
     componentWillReceiveProps(props){

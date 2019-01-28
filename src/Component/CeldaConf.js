@@ -207,7 +207,7 @@ class CeldaConf extends React.Component {
                     />
                     <TextField
                         id="time"
-                        label="Inicio"
+                        label="Fin"
                         type="time"
                         name="hh_ff"
                         onClick={this.handleTime('hh_ff')}

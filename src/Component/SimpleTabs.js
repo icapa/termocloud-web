@@ -44,7 +44,7 @@ class SimpleTabs extends React.Component {
     var cloud = new Cloud();
     this.state = {
       value: 0,
-      user:-1,
+      user:null,
       cloud: cloud
 
     }
@@ -69,7 +69,8 @@ class SimpleTabs extends React.Component {
       console.log(error);
       alert(error.code);
   });*/
-    this.cloud.autentica(user,pass);
+    console.log("Autenticando:");
+    this.state.cloud.autentica(user,pass);
   }
 
   handleChange = (event, value) => {
