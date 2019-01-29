@@ -24,4 +24,4 @@ yarn-error.log*
 
 #ivan
 /src/config/*_conf.js
-.firebase/*
+./firebase/*
