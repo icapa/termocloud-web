@@ -227,7 +227,7 @@ class CeldaConf extends React.Component {
                     >
                         <option value="on">On</option>
                         <option value="off">Off</option>
-                        <option value="auto">Auto</option>
+                        <option value="automatico">Auto</option>
                     </Select>
                     </FormControl>
                     
