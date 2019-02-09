@@ -6,17 +6,22 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 //import * as firebase from 'firebase';
-
+import compose from 'recompose/compose';
+import Hidden from '@material-ui/core/Hidden';
+import withWidth from '@material-ui/core/withWidth';
 
 /* Los componentes */
 import SigIn from './SigIn'
 import Home from './Home'
 import Conf from './Conf'
+import Registros from './Registros'
+import CeldaRegistro from './DiaRegistro'
 
 //var config = require('../config/firebase_conf').firebase
 
 //var cloud = require('../Controladores/cloud');
 import Cloud from '../Controladores/cloud';
+
 
 function TabContainer(props) {
   return (
@@ -35,6 +40,14 @@ const styles = theme => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
   },
+  panel2:{
+    display:'flex',
+    flex:1,
+    flexDirection:'row',
+    justifyContent:'space-around',
+    alignContent:'center',
+    margin:"0px",
+  }
 });
 
 
@@ -88,16 +101,31 @@ class SimpleTabs extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
-          <Tabs value={value} onChange={this.handleChange}>
-            <Tab label="Estado" />
-            <Tab label="Configuración" />
-            <Tab label="Registros" />
-          </Tabs>
-        </AppBar>
-        {value === 0 && <TabContainer><Home bbdd={this.state.cloud}/></TabContainer>}
-        {value === 1 && <TabContainer><Conf bbdd={this.state.cloud}/></TabContainer>}
-        {value === 2 && <TabContainer>Item Three</TabContainer>}
+        <Hidden only={['sm','md','lg','xl']}>
+          <AppBar position="static">
+            <Tabs value={value} onChange={this.handleChange}>
+              <Tab label="Estado" />
+              <Tab label="Configuración" />
+              <Tab label="Registros" />
+            </Tabs>
+          </AppBar>
+          {value === 0 && <TabContainer><Home bbdd={this.state.cloud}/></TabContainer>}
+          {value === 1 && <TabContainer><Conf bbdd={this.state.cloud}/></TabContainer>}
+          {value === 2 && <TabContainer><Registros bbdd={this.state.cloud}/></TabContainer>}
+        </Hidden>
+        <Hidden only={['xs','lg','xl','md']}>
+          <div className={classes.panel2}>
+            <Home bbdd={this.state.cloud}/>
+            <Conf bbdd={this.state.cloud}/>
+          </div>
+        </Hidden>
+        <Hidden only={['xs','sm']}>
+          <div className={classes.panel2}>
+            <Home bbdd={this.state.cloud}/>
+            <Conf bbdd={this.state.cloud}/>
+            <Registros bbdd={this.state.cloud}/>
+          </div>
+        </Hidden>
       </div>
     );
   }
@@ -118,4 +146,4 @@ SimpleTabs.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SimpleTabs);
+export default compose(withWidth(),withStyles(styles),)(SimpleTabs);
