@@ -39,6 +39,8 @@ class Home extends React.Component {
             user:{
             },
             info:{
+            },
+            registro:{
 
             }
         }
@@ -80,9 +82,18 @@ class Home extends React.Component {
             });
             var estadoRef=firebase.bbdd.database().ref(id+'/estado');
             estadoRef.on('value',snapshot=>{
+                let elEstado = snapshot.val();
                 this.setState({
-                    estado: snapshot.val()
+                    estado: elEstado
+                    
                 })
+                
+                firebase.bbdd.database().ref(id+'/conf/'+elEstado.registro).once('value').then((snapshot)=>{
+                    this.setState({
+                        registro: snapshot.val()
+                    })
+                });
+                
             })
             var infoRef=firebase.bbdd.database().ref(id+'/id');
             infoRef.on('value',snapshot=>{
@@ -113,7 +124,7 @@ class Home extends React.Component {
                 </Typography>
                 <div>
                     <div>
-                    <Status estado={this.state.estado} />
+                    <Status estado={this.state.estado} registro={this.state.registro}/>
                     </div>
                     <div>
                         <Control control={this.state.control} estado={this.state.estado} 

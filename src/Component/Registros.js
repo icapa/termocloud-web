@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import DiaRegistro from './DiaRegistro'
 import ItemRegistro from './ItemRegistro'
-import { Typography } from '@material-ui/core';
+//import { Typography } from '@material-ui/core';
 
 var moment = require('moment');
 

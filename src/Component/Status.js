@@ -1,7 +1,7 @@
 import React from 'react';
 import {Typography}from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
-
+import EstadoRegistro from './EstadoRegistro';
 
 const styles = theme => ({
     root: {
@@ -47,6 +47,8 @@ class Status extends React.Component {
     render(){
         
         const {classes} = this.props;
+        
+        
         return(
             
             <div>
@@ -61,9 +63,12 @@ class Status extends React.Component {
                     {this.props.estado.temperaturaObjetivo}ºC
                 </Typography>
                 */}
+                
+
                 <Typography variant='h6' align='center' gutterBottom>
                     {this.renderFecha()}
                 </Typography>
+                <EstadoRegistro elRegistro={this.props.registro}/>
                 
             </div>
         );
