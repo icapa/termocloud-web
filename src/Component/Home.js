@@ -115,30 +115,26 @@ class Home extends React.Component {
     render(){
         
         
-        if (this.state.id){
-            return (
-                
+        
+        return (
+            
+            <div>
+            <Typography variant='h6' align='center' gutterBottom>
+                {this.state.info.lugar}
+            </Typography>
+            <div>
                 <div>
-                <Typography variant='h6' align='center' gutterBottom>
-                    {this.state.info.lugar}
-                </Typography>
+                <Status estado={this.state.estado} registro={this.state.registro}/>
+                </div>
                 <div>
-                    <div>
-                    <Status estado={this.state.estado} registro={this.state.registro}/>
-                    </div>
-                    <div>
-                        <Control control={this.state.control} estado={this.state.estado} 
-                            onCambiaModo={this.onCambiaModo}
-                            onCambiaTemperatura={this.onCambiaTemperatura}/>
-                    </div>
+                    <Control control={this.state.control} estado={this.state.estado} 
+                        onCambiaModo={this.onCambiaModo}
+                        onCambiaTemperatura={this.onCambiaTemperatura}/>
                 </div>
-                </div>
-            );
-        }else{
-            return(
-                <SigIn onSigIn ={this.onSigIn} />
-            );
-        }
+            </div>
+            </div>
+        );
+        
     }
 }
 )

@@ -58,8 +58,8 @@ class SimpleTabs extends React.Component {
     this.state = {
       value: 0,
       user:null,
-      cloud: cloud
-
+      cloud: cloud,
+      cargando: 1
     }
     this.onSigIn = this.onSigInFunc.bind(this)
   }
@@ -69,9 +69,13 @@ class SimpleTabs extends React.Component {
           console.log("Usuario autenticado!!!");
           console.log(user.email);
           this.setState({
-              user: user
+              user: user,
+              
           })
       }
+      this.setState({
+        cargando:0
+      })
     });
   }
 
@@ -93,6 +97,11 @@ class SimpleTabs extends React.Component {
   renderLogin(){
     return(
       <SigIn onSigIn ={this.onSigIn} />
+    )
+  }
+  renderEsperando(){
+    return(
+      <Typography variant="h4">Esperando...</Typography>
     )
   }
   renderTabs(){
@@ -132,6 +141,9 @@ class SimpleTabs extends React.Component {
 
   render() {
     console.log(this.state.user);
+    if (this.state.cargando===1){
+      return (this.renderEsperando());
+    }
     if (this.state.user){
       return(this.renderTabs());
     }

@@ -10,7 +10,7 @@ const styles = theme => ({
         paddingBottom: theme.spacing.unit *2,
     },
     imagen:{
-        borderRadius:50
+        borderRadius:30
     }
 });
 
