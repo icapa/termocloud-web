@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import SimpleTabs from './Component/SimpleTabs'
-
+//import SimpleTabs from './Component/SimpleTabs'
+import CajonPersistente from './Component/CajonPersistente'
 
 
 import { withStyles } from '@material-ui/core/styles'
@@ -15,12 +15,11 @@ const styles={
 }
 
 export default withStyles(styles)(
-class App extends Component {
-  render() {
-    return (
-      <SimpleTabs />
-    );
+  class App extends Component {
+    render() {
+      return (
+        <CajonPersistente />
+      );
+    }
   }
-}
-)
-
+  )
