@@ -17,9 +17,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 //import InboxIcon from '@material-ui/icons/MoveToInbox';
 //import MailIcon from '@material-ui/icons/Mail';
-
+import {useSession} from '../Controladores/FirebaseContextUser'
 /* Los componentes */
-import Home from './Home'
+//import Home from './Home'
 
 const drawerWidth = 240;
 
@@ -79,12 +79,15 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function PersistentDrawerLeft() {
+export default function PersistentDrawerLeft(props) {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    const [indexPage,setIndexPage] = React.useState(0)
-
+    const [indexPage,setIndexPage] = React.useState(0);
+    const user = useSession();
+    
+    const {onSigOut} = props;
+   
     const handleDrawerOpen = () => {
         setOpen(true);
     };
@@ -96,11 +99,16 @@ export default function PersistentDrawerLeft() {
     const onPageChange = item =>{
         console.log("Cambiamos de pagina a ");
         console.log(item);
+        if (item===4){
+          if (onSigOut){
+            onSigOut();
+          }
+        }
         setIndexPage(item);
     }
     const renderPage = () => {
         if (indexPage === 0){
-            return <Home/>;
+            return <div>{user.email}</div>
         }
         else{
             return "No hay na";
@@ -147,7 +155,7 @@ export default function PersistentDrawerLeft() {
             </div>
             <Divider />
             <List>
-            {['Estado', 'Configuración', 'Registros', 'Consumo'].map((text, index) => (
+            {['Estado', 'Configuración', 'Registros', 'Consumo','Salir'].map((text, index) => (
                 <ListItem button key={index} onClick={() => onPageChange(index)}>
                 <ListItemText primary={text}  />
                 </ListItem>
