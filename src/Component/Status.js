@@ -14,66 +14,76 @@ const styles = theme => ({
     }
 });
 
-class Status extends React.Component {
-    renderFecha(){
-        if (this.props.estado){
-            let fechaOrig = this.props.estado.fecha
+function Status(props){
+    const {classes,estado,registro} = props;
+    
+    const renderFecha =()=>{
+        if (estado){
+            let fechaOrig = estado.fecha
             if (fechaOrig){
                 var partes = fechaOrig.split("T");
                 var hora = partes[1].split("+")
-                return (partes[0] + ' ' + hora[0])
+                return (
+                    <div>
+                        <Typography variant='h5' align='center' gutterBottom>
+                        {hora[0]}
+                        </Typography>
+                        <Typography variant='subtitle1' align='center' gutterBottom>
+                        {partes[0]}
+                        </Typography>
+                    </div>
+                    )
             }
         }
     }
-    renderImagen(){
-        if (this.props.estado){
-            if (this.props.estado.encendido===1){
+    const renderImagen=()=>{
+        if (estado){
+            if (estado.encendido===1){
                 return "fuego.gif"
             }else{
                 return "fuego_apagado.gif"
             }
         }
     }
-    renderTemperatura(){
-        if (this.props.estado){
-            if (this.props.estado.temperatura)
-                return this.props.estado.temperatura+' ºC';
+    const renderTemperatura= ()=>{
+        if (estado){
+            if (estado.temperatura)
+                return estado.temperatura+' ºC';
             else
                 return '';
             
         }
         return ''
     }
-    render(){
-        
-        const {classes} = this.props;
-        
-        
-        return(
+    const renderEstadoRegistro = ()=>{
+        if (registro){
+            return <EstadoRegistro elRegistro={registro}/>
+        }
+        else return (<></>)
+    }
             
-            <div>
-                
-                <center><img width="100" height="100" alt="" className={classes.imagen} src={this.renderImagen()} /></center>
-                
-                <Typography variant='display1' align='center' gutterBottom>
-                    {this.renderTemperatura()}
-                </Typography>
-                {/*
-                <Typography variant='h5' align='center' gutterBottom>
-                    {this.props.estado.temperaturaObjetivo}ºC
-                </Typography>
-                */}
-                
+    return(
+            
+        <div>
+            
+            <center><img width="100" height="100" alt="" className={classes.imagen} src={renderImagen()} /></center>
+            
+            <Typography variant='h4' align='center' gutterBottom>
+                {renderTemperatura()}
+            </Typography>
+           
+            {renderFecha()}
+            
+            {renderEstadoRegistro()}
+            
+            
+            
 
-                <Typography variant='h6' align='center' gutterBottom>
-                    {this.renderFecha()}
-                </Typography>
-                <EstadoRegistro elRegistro={this.props.registro}/>
-                
-            </div>
+            
+        </div>
         );
     }
-}
+
 
 
 export default withStyles(styles)(Status);

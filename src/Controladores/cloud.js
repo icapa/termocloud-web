@@ -1,44 +1,36 @@
 
 import * as firebase from 'firebase'
-var config = require('../config/firebase_conf').firebase
 
+//var config = require('../config/firebase_conf').firebase
 
-
-class Cloud{
-    constructor(){
-        
-        firebase.initializeApp(config);
-        this.bbdd=firebase;
-    }
-    autentica(user,pass){
-        firebase.auth().signInWithEmailAndPassword(user,pass).catch(function(error){
-            console("Mando auth y que sale??");
-            console.log(error);
-            alert(error.code);
-        });
-    }
-
-    creaConfiguracion(id,laConfiguracion){
-        var newKey = firebase.database().ref(id+'/conf/').push().key;
-        var updates={};
-        updates[id+'/conf/'+newKey] = laConfiguracion;
-        return firebase.database().ref().update(updates);
-    }
-    borraConfiguracion(id,laKey){
-        var referencia = firebase.database().ref(id+'/conf/'+laKey);
-        referencia.remove();
-    }
-    actualizaConfiguracion(id,estado){
-        var updates={};
-        
-        
-        
-        console.log('Actualizando: '+id+'/conf/'+estado.id);
-        updates[id+'/conf/'+estado.id] = estado;
-        return firebase.database().ref().update(updates);
-
-    }
-    
+export  const  getDatabaseId = (handler)=>{
+    let ref = firebase.database().ref()
+    ref.once("value")
+    .then(function(snapshot){
+        var id=Object.keys(snapshot.val())[0];
+        handler(id)
+    })  
+    return ref;
 }
-export default Cloud;
+export const eventoEstado = (id,handler) =>{
+    let ref = firebase.database().ref(id+'/estado')
+    ref.on("value",(snapshot)=>{
+       handler(snapshot.val());
+    })
+    return ref;
+}
+export const eventoEstadoRegistro = (id,registro,handler) =>{
+    let ref = firebase.database().ref(id+'/conf/'+registro)
+    ref.on("value",(snapshot)=>{
+        handler(snapshot.val());
+    })
+    return ref;
+}
+export const eventoControl = (id,handler) =>{
+    let ref = firebase.database().ref(id+'/control')
+    ref.on("value",(snapshot)=>{
+        handler(snapshot.val());
+    })
+    return ref;
+}
 

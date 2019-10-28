@@ -19,7 +19,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 //import MailIcon from '@material-ui/icons/Mail';
 import {useSession} from '../Controladores/FirebaseContextUser'
 /* Los componentes */
-//import Home from './Home'
+import Home from './Home'
 
 const drawerWidth = 240;
 
@@ -97,8 +97,6 @@ export default function PersistentDrawerLeft(props) {
     };
 
     const onPageChange = item =>{
-        console.log("Cambiamos de pagina a ");
-        console.log(item);
         if (item===4){
           if (onSigOut){
             onSigOut();
@@ -108,7 +106,7 @@ export default function PersistentDrawerLeft(props) {
     }
     const renderPage = () => {
         if (indexPage === 0){
-            return <div>{user.email}</div>
+            return <Home/>
         }
         else{
             return "No hay na";

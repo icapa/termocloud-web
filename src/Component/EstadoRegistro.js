@@ -69,7 +69,7 @@ function EstadoRegistro(props){
         
         <div className={classes.listaBotones}>
             {pintoIcono}
-            <Typography variant='h7'>{GeneraRegistro()}</Typography>
+            <Typography variant='subtitle2'>{GeneraRegistro()}</Typography>
         </div>
         
     );
