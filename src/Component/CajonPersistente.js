@@ -86,6 +86,8 @@ export default function PersistentDrawerLeft(props) {
     const [indexPage,setIndexPage] = React.useState(0);
     const user = useSession();
     
+    const losTabs=['Estado', 'Configuración', 'Registros', 'Consumo','Salir'];
+
     const {onSigOut} = props;
    
     const handleDrawerOpen = () => {
@@ -105,12 +107,14 @@ export default function PersistentDrawerLeft(props) {
         setIndexPage(item);
     }
     const renderPage = () => {
+        
         if (indexPage === 0){
             return <Home/>
         }
         else{
             return "No hay na";
         }
+        
     }
 
     return (
@@ -133,7 +137,7 @@ export default function PersistentDrawerLeft(props) {
                 <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-                Persistent drawer
+                {losTabs[indexPage]}
             </Typography>
             </Toolbar>
         </AppBar>
@@ -153,8 +157,12 @@ export default function PersistentDrawerLeft(props) {
             </div>
             <Divider />
             <List>
-            {['Estado', 'Configuración', 'Registros', 'Consumo','Salir'].map((text, index) => (
-                <ListItem button key={index} onClick={() => onPageChange(index)}>
+            {losTabs.map((text, index) => (
+                <ListItem button key={index} onClick={() => {
+                    setOpen(false)
+                    onPageChange(index)
+                  }
+                  }>
                 <ListItemText primary={text}  />
                 </ListItem>
             ))}

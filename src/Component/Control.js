@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import {Button , IconButton, Typography}from '@material-ui/core'
 import AddCircle from '@material-ui/icons/AddCircle'
 import RemoveCircle from '@material-ui/icons/RemoveCircle'
@@ -47,66 +47,44 @@ const styles = theme => ({
     }
 });
 
-class Control extends React.Component {
-    constructor(props){
-        console.log("Control: Props");
-        console.log(props);
-        super(props)
-        this.state = {
-            //temperatura: Object.values(props.control.automatico)[0]
-            temperatura: props.estado.temperaturaObjetivo
-        }
-    }
-    componentWillReceiveProps(props){
-        if (!props.control) return;
-        if (props.control.automatico){
-            this.setState({
-                /*temperatura:Object.values(props.control.automatico)[0]*/
-                temperatura: props.estado.temperaturaObjetivo
-            })
-        }
-    }
-    sumaTemp(){
-        var temp = this.state.temperatura+1
-        this.setState({
-            temperatura: temp
-        }) 
-        if (this.props.onCambiaTemperatura){
-            this.props.onCambiaTemperatura(temp);
-        }
-    }
-    restaTemp(){
-        var temp = this.state.temperatura-1
-        this.setState({
-            temperatura: temp
-        }) 
-        if (this.props.onCambiaTemperatura){
-            this.props.onCambiaTemperatura(temp);
-        }
-    }
+function Control(props) {
+    
+    /* Propiedades */
+    const {classes,estado,control,onCambiaTemperatura,onCambiaModo} = props;
+    
+    /* Estados */
+    const [temperaturaObjetivo,setTemperaturaObjetivo] = useState(null);
    
-    onChange(params) {
-        
-        
-        if (this.props.onCambiaModo){
-            this.props.onCambiaModo(params);
+    useEffect(()=>{
+        if (estado && control){
+            if (control.automatico){
+                setTemperaturaObjetivo(estado.temperaturaObjetivo);
+            }
         }
-        
-    }
+    },[estado,control])
 
-    renderInput(){
-        if (!this.props.control) return;
-        const {classes} = this.props;
-        if (this.props.control.modo==="automatico"){
+    const cambiaTemp = (inc)=>{
+        var temp = temperaturaObjetivo+inc
+        setTemperaturaObjetivo(temp)
+        if (onCambiaTemperatura){
+            onCambiaTemperatura(temp);
+        }
+    }
+    
+
+    const renderInput = ()=>{
+        if (!control) return;
+       
+        if (control.modo==="automatico"){
             return(
                 <div className={classes.controlTemp}>
-                <IconButton variant="contained" onClick={()=>{this.sumaTemp()}}> 
+                <IconButton variant="contained" onClick={()=>{cambiaTemp(1)}}> 
                     <AddCircle/>
                 </IconButton>
-                <Typography variant='display1' align='center' gutterBottom>
-                    {this.state.temperatura} ºC  
+                <Typography variant='body1' align='center' gutterBottom>
+                    {estado.temperaturaObjetivo} ºC  
                 </Typography>
-                <IconButton variant="contained" onClick={()=>{this.restaTemp()}}> 
+                <IconButton variant="contained" onClick={()=>{cambiaTemp(-1)}}> 
                     <RemoveCircle/>
                 </IconButton>
         
@@ -115,21 +93,20 @@ class Control extends React.Component {
        
    }
 
-   renderBotones(){
+   const renderBotones=()=>{
         var styleOn;
         var styleOff;
         var styleAuto;
-        if (!this.props.control) return;
-        const {classes}= this.props;
-        if (this.props.control.modo==="on"){
+        if (!control) return;
+        if (control.modo==="on"){
             styleOn = "primary";
             styleOff = "default";
             styleAuto = "default";
-        }else if (this.props.control.modo==="off"){
+        }else if (control.modo==="off"){
             styleOn = "default"
             styleOff = "primary";
             styleAuto = "default";
-        }else if (this.props.control.modo==="automatico"){
+        }else if (control.modo==="automatico"){
             styleOn = "default";
             styleOff = "default";
             styleAuto = "primary";
@@ -137,17 +114,23 @@ class Control extends React.Component {
         return(
             <div className={classes.listaBotones}>
                 <Button variant="contained" color={styleOn} className={classes.button }
-                    onClick={()=>{this.onChange("on");}}
+                    onClick={()=>{
+                        if (onCambiaModo) onCambiaModo("on")
+                    }}
                 >
                     On
                 </Button>
                 <Button variant="contained" color={styleOff} className={classes.button}
-                    onClick={()=>{this.onChange("off");}}
+                    onClick={()=>{
+                        if (onCambiaModo) onCambiaModo("off");
+                    }}
                 >
                     Off
                 </Button>
                 <Button variant="contained" color={styleAuto} className={classes.button}
-                    onClick={()=>{this.onChange("automatico");}}
+                    onClick={()=>{
+                        if(onCambiaModo) onCambiaModo("automatico");
+                    }}
                 >
                     Auto
                 </Button>
@@ -156,19 +139,16 @@ class Control extends React.Component {
     }
 
 
-    render(){
-        const {classes} = this.props;
-        return(
-            <div>
-            
+    
+    return(
+        <div>    
             <div className={classes.contenedor}>
-                {this.renderBotones()}
-                {this.renderInput()}
+                {renderBotones()}
+                {renderInput()}
             </div>
-            
-            </div>
-        );
-    }
+        </div>
+    );
+    
 }
 
 export default withStyles(styles)(Control);

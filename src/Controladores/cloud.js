@@ -33,4 +33,16 @@ export const eventoControl = (id,handler) =>{
     })
     return ref;
 }
-
+export const bbddCambiaModo=(modo)=>{
+    getDatabaseId((id)=>{
+        var refModo = firebase.database().ref(id+'/control/modo');
+        refModo.set(modo.toLowerCase())
+    })
+    
+}
+export const bbddCambiaTemperaturaObjetivo=(temperatura)=>{
+    getDatabaseId((id)=>{
+        var refTemp = firebase.database().ref(id+'/control/automatico/temperatura')
+        refTemp.set(temperatura);
+    })
+}
