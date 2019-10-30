@@ -1,6 +1,6 @@
 import React,{useContext} from 'react'
 
-import {getDatabaseId,eventoEstado,eventoEstadoRegistro,eventoControl} from './cloud'
+import {getDatabaseId,eventoEstado,eventoEstadoRegistro,eventoControl,eventoConf} from './cloud'
 
 /* Contexto de la base de datos */
 export const databaseContext = React.createContext({
@@ -8,21 +8,22 @@ export const databaseContext = React.createContext({
     estado:null,
     estadoRegistro:null,
     control: null,
+    conf:null,
 })
 
 export const useDataBaseSession = () =>{
-    const {id,estado,estadoRegistro,control} = useContext(databaseContext)
-    return ({id:id,estado:estado,estadoRegistro:estadoRegistro,control:control});
+    const {id,estado,estadoRegistro,control,conf} = useContext(databaseContext)
+    return ({id:id,estado:estado,estadoRegistro:estadoRegistro,control:control,conf:conf});
 }
 export const useDatabase = () => {
     const [id,setId] = React.useState(null);
     const [estado,setEstado] = React.useState(null);
     const [control,setControl] = React.useState(null);
     const [estadoRegistro,setEstadoRegistro] = React.useState(null);
-    
+    const [conf,setConf] = React.useState(null);
     
     React.useEffect(() => {
-        var unEstado,unControl,unEstadoRegistro;
+        var unEstado,unControl,unEstadoRegistro,unConf;
         const unId = getDatabaseId((id)=>{
             setId(id);
             unEstado = eventoEstado(id,(estado)=>{
@@ -34,19 +35,24 @@ export const useDatabase = () => {
             unControl = eventoControl(id,(control)=>{
                 setControl(control);
             })
+            unConf = eventoConf((conf)=>{
+                setConf(conf);
+            })
         })
         return (() => {
-            unEstado.off();
-            unId.off();
-            unControl.off();
-            unEstadoRegistro.off();
+            if (unEstado) unEstado.off();
+            if(unId) unId.off();
+            if (unControl) unControl.off();
+            if (unEstadoRegistro) unEstadoRegistro.off();
+            if(unConf) unConf.off();
         })
       }, [])
       return ({
             id: id,
             estado:estado,
             control:control,
-            estadoRegistro:estadoRegistro}
+            estadoRegistro:estadoRegistro,
+            conf:conf}
             );
   }
   

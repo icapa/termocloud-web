@@ -33,6 +33,24 @@ export const eventoControl = (id,handler) =>{
     })
     return ref;
 }
+export const eventoConf = (handler) =>{
+    var ref;
+    getDatabaseId((id)=>{
+        ref = firebase.database().ref(id+'/conf');
+        ref.on("value",(snapshot)=>{
+            var auxReg=[];
+            snapshot.forEach(function(child){
+                var item = child.val();
+                item.id = child.key;  
+                    auxReg.push(item);
+                });
+        
+            handler(auxReg);
+        })
+        return ref;
+    })
+}
+
 export const bbddCambiaModo=(modo)=>{
     getDatabaseId((id)=>{
         var refModo = firebase.database().ref(id+'/control/modo');

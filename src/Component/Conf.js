@@ -2,6 +2,8 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab'
+import {useState} from 'react';
+import {useDatabase,databaseContext} from '../Controladores/FirebaseDatabaseContext'
 
 import CeldaConf from './CeldaConf'
 const styles = theme => ({
@@ -25,52 +27,27 @@ const styles = theme => ({
     
 });
 
-class Conf extends React.Component {
-    constructor(props){
-       
-        super(props)
-       
-        this.state = {
-            registros:[
-            ],
-            id:null
-        }
-        this.bbdd = this.props.bbdd;
-        this.onSubmitConf = this.onSubmitConfFunc.bind(this);
-        this.onSubmitDelete = this.onSubmitDeleteFunc.bind(this);
-        this.onAddConf = this.addConf.bind(this);
+function Conf (props) {
+    const { classes } = props;
+    
+    //const [ state, setState ] = useState(null);
+    const {conf} = useDatabase()
+
+
+    const onSubmitConf = (state)=>{
+        console.log("Actualizamos: Celda!! ");
+        console.log(state);
+        //this.bbdd.actualizaConfiguracion(id,state);
     }
-    componentDidMount(){
-        /* Cargamos tema de bbdd */
-        var firebase = this.bbdd;
-        firebase.bbdd.database().ref().on('value',snapshot=>{
-            var id=Object.keys(snapshot.val())[0];
-            this.setState({
-                id:id
-            });
-            
-            var escucha = firebase.bbdd.database().ref(id.toString()+'/conf');
-            escucha.on('value',snapshot=>{
-                var auxReg=[];
-                snapshot.forEach(function(child){
-                    var item = child.val();
-                    item.id = child.key;
-                    
-                    auxReg.push(item);
-                });
-                console.log(auxReg);
-                this.setState({
-                    registros:auxReg
-                })
-                }
-            )
-        });
-        
-        
+    const onSubmitDelete = (id) =>{
+        console.log("Borramos elemento: " + id);
+        //this.bbdd.borraConfiguracion(id);
     }
-    addConf(){
-        console.log("Añado un registro nuevo: " + this.state.id);
-        console.log(this.state.registros);
+    
+  
+    const onSubmitAddConf = () =>{
+        console.log("Añado un registro nuevo: ");
+        console.log(conf);
         var dummy={ 
             
             hh_ii:"00:00",
@@ -87,38 +64,28 @@ class Conf extends React.Component {
             enabled: false,
             pintaAceptar: false
         }
-        this.bbdd.creaConfiguracion(this.state.id,dummy);
+        //this.bbdd.creaConfiguracion(this.state.id,dummy);
     }
-    onSubmitDeleteFunc(id){
-        console.log("Borramos elemento: " + id);
-        this.bbdd.borraConfiguracion(this.state.id,id);
-    }
+    
 
-    onSubmitConfFunc (estado){
-        console.log("Actualizamos: Celda!! ");
-        console.log(estado);
-        this.bbdd.actualizaConfiguracion(this.state.id,estado);
-    }
+    
 
-    renderList(){
-        const {classes} = this.props;
+    const renderList= ()=>{
         const colorCelda = {
             colores:[
                 {clase: classes.celdaPar},
                 {clase: classes.celdaImpar} 
             ]
         }
-        if (this.state.registros!==null){
+        if (conf!==null){
             return(
                 <div>
-                    {this.state.registros.map((c,index) => 
-                
+                    {conf.map((c,index) => 
                         <div className={colorCelda.colores[index%2].clase} key={index.toString()}>
                             <CeldaConf 
-                                id={c.id}
-                                estado={this.state.registros[index]}
-                                onSubmit = {this.onSubmitConf}
-                                onDelete = {this.onSubmitDelete}
+                                estado={conf[index]}
+                                onSubmit = {onSubmitConf}
+                                onDelete = {onSubmitDelete}
                             />
                         </div>
                     )}
@@ -126,31 +93,27 @@ class Conf extends React.Component {
             );
         }
     }
-    renderButtonAdd(){
-        const {classes} = this.props;
-        if (this.state.id!==null){
-        return(
-            <Fab color="primary" aria-label="Add" className={classes.fab}>
+    const renderButtonAdd = ()=>{
+        if (conf!==null){
+            return(
+                <Fab color="primary" aria-label="Add" className={classes.fab}>
                     <AddIcon 
-                        onClick ={ this.onAddConf}
+                        onClick ={onSubmitAddConf}
                     />
-                    </Fab>
+                </Fab>
             )
         }
     }
-    render(){
-        const {classes} = this.props;
-        return(
-                <div className={classes.main}>
-                    {this.renderList()}
-                    
-                    {this.renderButtonAdd()}
-                </div>
-
-                
-            
-        );
-    }
+    
+    return(
+        <databaseContext.Provider value={{conf}}>
+            <div className={classes.main}>
+                {renderList()}
+                {renderButtonAdd()}
+            </div>       
+        </databaseContext.Provider>
+    );
+    
 }
 
 export default withStyles(styles)(Conf);

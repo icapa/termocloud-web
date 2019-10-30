@@ -20,6 +20,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import {useSession} from '../Controladores/FirebaseContextUser'
 /* Los componentes */
 import Home from './Home'
+import Conf from './Conf'
+
 
 const drawerWidth = 240;
 
@@ -84,7 +86,7 @@ export default function PersistentDrawerLeft(props) {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [indexPage,setIndexPage] = React.useState(0);
-    const user = useSession();
+    //const user = useSession();
     
     const losTabs=['Estado', 'Configuración', 'Registros', 'Consumo','Salir'];
 
@@ -111,8 +113,11 @@ export default function PersistentDrawerLeft(props) {
         if (indexPage === 0){
             return <Home/>
         }
+        else if (indexPage === 1){
+            return <Conf/>;
+        }
         else{
-            return "No hay na";
+          return "No hay na"
         }
         
     }
@@ -175,11 +180,6 @@ export default function PersistentDrawerLeft(props) {
         >
             <div className={classes.drawerHeader}/>
                 {renderPage()}
-                
-               
-            
-            
-            
             
         </main>
         </div>
