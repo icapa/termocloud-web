@@ -2,8 +2,10 @@ import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab'
+import CircularProgress from '@material-ui/core/CircularProgress';
 import {useState} from 'react';
-import {useDatabase,databaseContext} from '../Controladores/FirebaseDatabaseContext'
+import {useDatabase,useDataBaseSession,databaseContext} from '../Controladores/FirebaseDatabaseContext'
+import {bbddCambiaConf,bbddDeleteConf,bbddCreaConfiguracion} from '../Controladores/cloud'
 
 import CeldaConf from './CeldaConf'
 const styles = theme => ({
@@ -30,18 +32,19 @@ const styles = theme => ({
 function Conf (props) {
     const { classes } = props;
     
-    //const [ state, setState ] = useState(null);
+    
     const {conf} = useDatabase()
+    //const {conf} = useDataBaseSession();
 
 
     const onSubmitConf = (state)=>{
         console.log("Actualizamos: Celda!! ");
         console.log(state);
-        //this.bbdd.actualizaConfiguracion(id,state);
+        bbddCambiaConf(state);
     }
     const onSubmitDelete = (id) =>{
         console.log("Borramos elemento: " + id);
-        //this.bbdd.borraConfiguracion(id);
+        bbddDeleteConf(id);
     }
     
   
@@ -64,7 +67,7 @@ function Conf (props) {
             enabled: false,
             pintaAceptar: false
         }
-        //this.bbdd.creaConfiguracion(this.state.id,dummy);
+        bbddCreaConfiguracion(dummy);
     }
     
 
@@ -90,6 +93,14 @@ function Conf (props) {
                         </div>
                     )}
                 </div>
+            );
+        }
+        else{
+            return(
+                <div className={classes.root}>
+                <center><CircularProgress /></center>
+                
+              </div> 
             );
         }
     }

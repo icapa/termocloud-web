@@ -2,8 +2,9 @@ import React from 'react';
 import Status from './Status'
 import Control from './Control'
 import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
-import {useDatabase,databaseContext} from '../Controladores/FirebaseDatabaseContext'
+import {useDatabase,useDataBaseSession,databaseContext} from '../Controladores/FirebaseDatabaseContext'
 
 import {bbddCambiaModo,bbddCambiaTemperaturaObjetivo} from '../Controladores/cloud'
 
@@ -25,6 +26,7 @@ function Home(props) {
     /* Properties */
     const { classes } = props;
     const {id,estado,control,estadoRegistro} = useDatabase()
+    //const {id,estado,control,estadoRegistro} = useDataBaseSession()
     /* Handlers */
     const onCambiaTemperatura=(temp)=>{
         bbddCambiaTemperaturaObjetivo(temp);
@@ -36,7 +38,12 @@ function Home(props) {
     /* JSX */
     
     if (id===null){
-        return(<></>);
+        return(
+            <div className={classes.root}>
+            <center><CircularProgress /></center>
+            
+          </div> 
+        );
     }
     else{
         return(

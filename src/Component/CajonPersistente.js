@@ -92,6 +92,8 @@ export default function PersistentDrawerLeft(props) {
 
     const {onSigOut} = props;
    
+    
+
     const handleDrawerOpen = () => {
         setOpen(true);
     };

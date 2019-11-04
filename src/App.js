@@ -6,6 +6,8 @@ import SigIn from './Component/SigIn'
 import { withStyles } from '@material-ui/core/styles'
 
 import {useAuth,userContext} from './Controladores/FirebaseContextUser'
+
+
 import * as firebase from 'firebase'
 
 
@@ -26,6 +28,8 @@ function App(){
     
   const {initializing,user} = useAuth()
   
+  
+
   const onSigIn = (user,pass) =>{
     firebase.auth().signInWithEmailAndPassword(user,pass).catch(function(error){
       console("Mando auth y que sale??");
@@ -47,6 +51,7 @@ function App(){
   else{
     
     if (user){
+      
       return(
         <userContext.Provider value = {{user}}>
           <CajonPersistente value={{user}} onSigOut={onSigOut}/>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Checkbox,Typography,TextField, Button, InputLabel, Select, IconButton, FormControl, Switch} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
@@ -42,85 +42,119 @@ const styles = theme => ({
     },
     
 })
-class CeldaConf extends React.Component {
-    constructor(props){
-        super(props)
-        var aux = this.props.estado;
-        this.state = {
-            //temperatura: Object.values(props.control.automatico)[0]
-            id: aux.id,
-            hh_ii:aux.hh_ii,
-            hh_ff:aux.hh_ff,
-            estadoForm:aux.estadoForm,      
-            L:aux.L,
-            M:aux.M,
-            X:aux.X,
-            J:aux.J,
-            V:aux.V,
-            S:aux.S,
-            D:aux.D,
-            temperatura: aux.temperatura,
-            enabled: aux.enabled,
-                      
+function CeldaConf (props) {
+    
+    const [state,setState] = useState(props.estado);
+    /*
+        {
+        hh_ii:'',
+        hh_ff:'',
+        estadoForm:'automatico',
+        L:false,
+        M:false,
+        X:false,
+        J:false,
+        V:false,
+        S:false,
+        D:false,
+        temperatura: '',
+        enabled: false,    
         }
+    );
+    */
+    
+    const {classes,onDelete,onSubmit} = props;
+    
+    
+
+    /* Handlers */
+    const handleTemperatura = event =>{
+        
+        setState( (prevState) =>(
+            {
+                ...prevState,
+                [event.target.name]: event.target.checked,
+                pintaAceptar:true,
+            }
+        ))  
+
+
+        setState((prevState)=>(
+            {
+                ...prevState,
+                temperatura:event.target.value,
+                pintaAceptar:true
+            }
+        ))
+        
     }
     
-    handleTemperatura=event=>{
-        this.setState({
-            temperatura:event.target.value,
-            pintaAceptar:true
-        })
-    }
-    
-    handleDelete= () =>{
-        if (this.props.onDelete){
-            this.props.onDelete(this.state.id);
+    const handleDelete= () =>{
+        
+        if (onDelete){
+            onDelete(state.id);
         }
-    }
-    handleEnable = event =>{
         
-        this.setState({
-            enabled:event.target.checked,
-            pintaAceptar:true
-        })
     }
-    handleTime = name => event =>{
+    const handleEnable = event =>{
         
-        this.setState({ 
-            pintaAceptar:true,
-            [name]: event.target.value,
-        })
+        setState((prevState)=>(
+            {
+                ...prevState,
+                enabled:event.target.checked,
+                pintaAceptar:true
+            }
+        ));
+        
+    }
+    const handleTime = name => event =>{
+        
+        setState((prevState)=>(
+            {
+                ...prevState, 
+                pintaAceptar:true,
+                [name]: event.target.value,
+            }
+        ));
+        
     }
 
-    handleCheck = name => event =>{
-        this.setState({
-            [name]: event.target.checked,
-            pintaAceptar:true,
-        }) 
+    function handleCheck (event){
+        setState( (prevState) =>(
+            {
+                ...prevState,
+                [event.target.name]: event.target.checked,
+                pintaAceptar:true,
+            }
+        ))  
     }
 
-    handleEvent  = (event) =>{
+    const handleEvent  = (event) =>{
+        
         event.preventDefault();
-        this.setState({
+        setState((prevState)=>({
+            ...prevState,
             pintaAceptar: false
-        }
-        )
-        if (this.props.onSubmit){
-            var enviarEstado = this.state;
+        }));
+        if (onSubmit){
+            var enviarEstado = state;
             delete enviarEstado.pintaAceptar;
-            this.props.onSubmit(enviarEstado);
+            onSubmit(enviarEstado);
         }
     }
-    handleSelect = (event) => {  
-        this.setState({
+    const handleSelect = (event) => {  
+        
+        setState((prevState)=>({
+            ...prevState,
             estadoForm: event.target.value,
             pintaAceptar: true
-        }) 
+        }));  
         
     }
 
-    renderButton(){ 
-        if (this.state.pintaAceptar===true){
+    const renderButton=()=>{ 
+        
+        if (state.pintaAceptar===true){
             return(
                 <Button
                     type="submit" 
@@ -130,73 +164,87 @@ class CeldaConf extends React.Component {
                 >Aceptar</Button>
             );
         }
+        
     }
-    render(){
-        const {classes} = this.props;
+    
+    if (!true){
+        return(<></>)
+    }
+    else {
         return(
             <div className={classes.main}>
-                <form onSubmit={this.handleEvent}>
+                <form onSubmit={handleEvent}>
                     <div className={classes.lista}>
                     <div className={classes.dia}>
                         <Typography>L</Typography>
                         <Checkbox
-                        checked={this.state.L}
-                        onChange={this.handleCheck('L')}
+                        checked={state.L}
+                        value={state.L}
+                        onChange={handleCheck}
                         name="L"
                         />
                     </div>
+           
+        
+            
                     <div className={classes.dia}>
                         <Typography>M</Typography>
                         <Checkbox
-                        checked={this.state.M}
-                        onChange={this.handleCheck('M')}
+                        checked={state.M}
+                        value={state.M}
+                        onChange={handleCheck}
+                        name="M"
                         />
                     </div>
                     <div className={classes.dia}>
                         <Typography>X</Typography>
                         <Checkbox
-                        checked={this.state.X}
-                        onChange={this.handleCheck('X')}
+                        checked={state.X}
+                        onChange={handleCheck}
+                        name="X"
                         />
                     </div>
                     <div className={classes.dia}>
                         <Typography>J</Typography>
                         <Checkbox
-                        checked={this.state.J}
-                        onChange={this.handleCheck('J')}
+                        checked={state.J}
+                        onChange={handleCheck}
+                        name="J"
                         />
                     </div>
                     <div className={classes.dia}>
                         <Typography>V</Typography>
                         <Checkbox
-                        checked={this.state.V}
-                        onChange={this.handleCheck('V')}
+                        checked={state.V}
+                        onChange={handleCheck}
+                        name="V"
                         />
                     </div>
                     <div className={classes.dia}>
                         <Typography>S</Typography>
                         <Checkbox
-                        checked={this.state.S}
-                        onChange={this.handleCheck('S')}
+                        checked={state.S}
+                        onChange={handleCheck}
+                        name="S"
                         />
                     </div>
                     <div className={classes.dia}>
                         <Typography>D</Typography>
                         <Checkbox
-                        checked={this.state.D}
-                        onChange={this.handleCheck('D')}
+                        checked={state.D}
+                        onChange={handleCheck}
+                        name="D"
                         />
                     </div>
                 </div>                 
                     <div className={classes.lista}>
-                    
                     <TextField
                         id="time"
                         label="Inicio"
                         type="time"
                         name="hh_ii"
-                        onClick={this.handleTime('hh_ii')}
-                        defaultValue={this.state.hh_ii}
+                        onClick={handleTime('hh_ii')}
+                        defaultValue={state.hh_ii}
                         className={classes.textField}
                         InputLabelProps={{
                         shrink: true,
@@ -210,8 +258,8 @@ class CeldaConf extends React.Component {
                         label="Fin"
                         type="time"
                         name="hh_ff"
-                        onClick={this.handleTime('hh_ff')}
-                        defaultValue={this.state.hh_ff}
+                        onClick={handleTime('hh_ff')}
+                        defaultValue={state.hh_ff}
                         className={classes.textField}
                         InputLabelProps={{
                         shrink: true,
@@ -222,8 +270,8 @@ class CeldaConf extends React.Component {
                     />
                     <FormControl className={classes.formControl}>
                     <InputLabel htmlFor="name-native-disabled">Modo</InputLabel>
-                    <Select native value={this.state.estadoForm} name="estado"
-                        onChange={this.handleSelect}
+                    <Select native value={state.estadoForm} name="estado"
+                        onChange={handleSelect}
                     >
                         <option value="on">On</option>
                         <option value="off">Off</option>
@@ -237,8 +285,8 @@ class CeldaConf extends React.Component {
                         maxlenght="3"
                         type="number"
                         name="temperatura"
-                        onChange={this.handleTemperatura}
-                        defaultValue={this.state.temperatura}
+                        onChange={handleTemperatura}
+                        defaultValue={state.temperatura}
                         className={classes.textoTemp}
                         InputLabelProps={{
                         shrink: true,
@@ -250,36 +298,27 @@ class CeldaConf extends React.Component {
                     
                     </div>
                     <div className={classes.lista}>
-                    {/*           
-                        <Button
-                            type="submit" 
-                            variant="contained"
-                            color="primary"
-                            visibility="hidden"
-                        >Aceptar</Button>
-                        */}
-                        {this.renderButton()}
+                    
+                        {renderButton()}
                         
                         <Switch
-                            checked={this.state.enabled}
-                            onChange={this.handleEnable}
+                            checked={state.enabled}
+                            onChange={handleEnable}
                             name="enable"
                             color="primary"
                         />
                         
-                        <IconButton variant="contained" onClick={this.handleDelete}> 
+                        <IconButton variant="contained" onClick={handleDelete}> 
                             <Delete/>
                         </IconButton>
                         
                     </div>
                     </form>
-                          
+                            
             </div>
-        );
+        )
+        
     }
 }    
-CeldaConf.propTypes = {
-    estado: PropTypes.object.isRequired
-};
 
 export default withStyles(styles)(CeldaConf);

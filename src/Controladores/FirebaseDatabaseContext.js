@@ -22,6 +22,8 @@ export const useDatabase = () => {
     const [estadoRegistro,setEstadoRegistro] = React.useState(null);
     const [conf,setConf] = React.useState(null);
     
+    
+
     React.useEffect(() => {
         var unEstado,unControl,unEstadoRegistro,unConf;
         const unId = getDatabaseId((id)=>{
@@ -40,11 +42,14 @@ export const useDatabase = () => {
             })
         })
         return (() => {
+            console.log("DatabaseContext: Salgo");
+            /*
             if (unEstado) unEstado.off();
             if(unId) unId.off();
             if (unControl) unControl.off();
             if (unEstadoRegistro) unEstadoRegistro.off();
             if(unConf) unConf.off();
+            */
         })
       }, [])
       return ({

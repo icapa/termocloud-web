@@ -1,7 +1,6 @@
 
 import * as firebase from 'firebase'
 
-//var config = require('../config/firebase_conf').firebase
 
 export  const  getDatabaseId = (handler)=>{
     let ref = firebase.database().ref()
@@ -62,5 +61,25 @@ export const bbddCambiaTemperaturaObjetivo=(temperatura)=>{
     getDatabaseId((id)=>{
         var refTemp = firebase.database().ref(id+'/control/automatico/temperatura')
         refTemp.set(temperatura);
+    })
+}
+export const bbddCambiaConf = (conf)=>{
+    getDatabaseId((id)=>{
+        var refConf = firebase.database().ref(id+'/conf/'+conf.id);
+        refConf.set(conf);
+    })
+}
+export const bbddDeleteConf = (id) =>{
+    getDatabaseId((dbId)=>{
+        var refConf=firebase.database().ref(dbId+'/conf/'+id);
+        refConf.remove();
+    })
+}
+export const bbddCreaConfiguracion = (conf) =>{
+    getDatabaseId((id)=>{
+        var newKey = firebase.database().ref(id+'/conf/').push().key;
+        var updates={};
+        updates[id+'/conf/'+newKey] = conf;
+        firebase.database().ref().update(updates);
     })
 }
