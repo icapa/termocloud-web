@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab'
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {useState} from 'react';
+import {useState,useContext} from 'react';
 import {DatabaseContext} from '../Controladores/FirebaseDatabaseContext'
 import {bbddCambiaConf,bbddDeleteConf,bbddCreaConfiguracion} from '../Controladores/cloud'
 
@@ -33,8 +33,8 @@ function Conf (props) {
     const { classes } = props;
     
     
-    const {conf} = null
-    //const {conf} = useDataBaseSession();
+    const database = useContext(DatabaseContext);
+    
 
 
     const onSubmitConf = (state)=>{
@@ -50,7 +50,7 @@ function Conf (props) {
   
     const onSubmitAddConf = () =>{
         console.log("Añado un registro nuevo: ");
-        console.log(conf);
+        console.log(database.conf);
         var dummy={ 
             
             hh_ii:"00:00",
@@ -80,13 +80,17 @@ function Conf (props) {
                 {clase: classes.celdaImpar} 
             ]
         }
-        if (conf!==null){
+        if (database!==null){
+            console.log("CONF: Nueva configuracion");
+            
             return(
                 <div>
-                    {conf.map((c,index) => 
+                    {console.log("CONF: ", database.conf)}
+                    {database.conf.map((c,index) => 
+                        
                         <div className={colorCelda.colores[index%2].clase} key={index.toString()}>
                             <CeldaConf 
-                                estado={conf[index]}
+                                estado={c}
                                 onSubmit = {onSubmitConf}
                                 onDelete = {onSubmitDelete}
                             />
@@ -105,7 +109,7 @@ function Conf (props) {
         }
     }
     const renderButtonAdd = ()=>{
-        if (conf!==null){
+        if (database.conf!==null){
             return(
                 <Fab color="primary" aria-label="Add" className={classes.fab}>
                     <AddIcon 
@@ -117,12 +121,10 @@ function Conf (props) {
     }
     
     return(
-        
             <div className={classes.main}>
                 {renderList()}
                 {renderButtonAdd()}
             </div>       
-    
     );
     
 }

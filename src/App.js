@@ -5,7 +5,7 @@ import CajonPersistente from './Component/CajonPersistente'
 import SigIn from './Component/SigIn'
 import { withStyles } from '@material-ui/core/styles'
 
-import {useAuth,useSession} from './Controladores/FirebaseContextUser'
+import {useAuth,userContext} from './Controladores/FirebaseContextUser'
 
 
 import * as firebase from 'firebase'
@@ -19,8 +19,8 @@ var config = require('./config/firebase_conf').firebase
 
 const styles={
   root: {
-    margin: 20,
-    padding: 20,
+    margin: 10,
+    padding: 10,
     maxWidth:200
   }
 }
@@ -33,7 +33,7 @@ function App(){
     
   const {initializing,user} = useAuth()
   const database = useDatabase();
-  
+
   const onSigIn = (user,pass) =>{
     firebase.auth().signInWithEmailAndPassword(user,pass).catch(function(error){
       console("Mando auth y que sale??");
@@ -56,20 +56,12 @@ function App(){
     
     if (user){
       return(
-        /*
+        
         <userContext.Provider value = {{user}}>
-          
-            
-            <CajonPersistente value={{user}} onSigOut={onSigOut}/>
-            
-        </userContext.Provider>*/
-        <DatabaseContext.Provider value={database}>
-          <Fuck/>
-        </DatabaseContext.Provider>
-        
-        
-        
-
+            <DatabaseContext.Provider value={database}>
+              <CajonPersistente value={{user}} onSigOut={onSigOut}/>
+            </DatabaseContext.Provider>
+        </userContext.Provider>
       )
     }
     else{
@@ -78,35 +70,5 @@ function App(){
   }
 }
 
-const Fuck=()=>{
-    const database = useContext(DatabaseContext);
-    if (database){
-      return(
-        <div>
-              <p>Bien {database.id}</p>
-        </div>
-      )
-    }
-    else{
-      return(
-        <div>
-              <p>No hay na</p>
-        </div>
-      )
-    }
-    
-}
-
 
 export default withStyles(styles)(App);
-/*
-export default withStyles(styles)(
-  class App extends Component {
-    render() {
-      return (
-        <CajonPersistente />
-      );
-    }
-  }
-  )
-*/

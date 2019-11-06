@@ -27,13 +27,13 @@ function Home(props) {
     /* Properties */
     const { classes } = props;
    
-    //const {id,estado,control,estadoRegistro} = useContext(DatabaseContext);
+    const database = useContext(DatabaseContext);
     
     //const state = useContext(DatabaseContext);
 
     
 
-    const id=5;
+    
     //const {id,estado,control,estadoRegistro} = useDataBaseSession()
     /* Handlers */
     const onCambiaTemperatura=(temp)=>{
@@ -45,7 +45,7 @@ function Home(props) {
 
     /* JSX */
     
-    if (id===null){
+    if (database==null){
         return(
             <div className={classes.root}>
             <center><CircularProgress /></center>
@@ -56,21 +56,19 @@ function Home(props) {
     else{
         
         return(
-                <div>Soy HOME</div>
-                /*<main className={classes.main}>
+                
+                <main className={classes.main}>
                
                 
-                {/*
-                <Status estado={estado} registro={estadoRegistro}/>     
+                
+                <Status estado={database.estado} registro={database.estadoRegistro}/>     
                 <Control 
-                    estado={estado} 
-                    control={control}
+                    estado={database.estado} 
+                    control={database.control}
                     onCambiaTemperatura={onCambiaTemperatura}
                     onCambiaModo={onCambiaModo}
                 />
-                 
-
-                </main>*/
+                </main>
             
         )
     }

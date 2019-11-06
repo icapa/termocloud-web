@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 
 import { Checkbox,Typography,TextField, Button, InputLabel, Select, IconButton, FormControl, Switch} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 import Delete from '@material-ui/icons/Delete'
 import PropTypes from 'prop-types';
+
 const styles = theme => ({
     main:{
         display:'flex',
@@ -45,25 +46,10 @@ const styles = theme => ({
 function CeldaConf (props) {
     
     const [state,setState] = useState(props.estado);
-    /*
-        {
-        hh_ii:'',
-        hh_ff:'',
-        estadoForm:'automatico',
-        L:false,
-        M:false,
-        X:false,
-        J:false,
-        V:false,
-        S:false,
-        D:false,
-        temperatura: '',
-        enabled: false,    
-        }
-    );
-    */
+    
     
     const {classes,onDelete,onSubmit} = props;
+    
     
     
 
@@ -171,7 +157,8 @@ function CeldaConf (props) {
         return(<></>)
     }
     else {
-        return(
+        console.log("CELDA_CONF: Repinto la puta celda")
+        return( 
             <div className={classes.main}>
                 <form onSubmit={handleEvent}>
                     <div className={classes.lista}>
