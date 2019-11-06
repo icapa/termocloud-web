@@ -4,7 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import {useState} from 'react';
-import {useDatabase,useDataBaseSession,databaseContext} from '../Controladores/FirebaseDatabaseContext'
+import {DatabaseContext} from '../Controladores/FirebaseDatabaseContext'
 import {bbddCambiaConf,bbddDeleteConf,bbddCreaConfiguracion} from '../Controladores/cloud'
 
 import CeldaConf from './CeldaConf'
@@ -33,7 +33,7 @@ function Conf (props) {
     const { classes } = props;
     
     
-    const {conf} = useDatabase()
+    const {conf} = null
     //const {conf} = useDataBaseSession();
 
 
@@ -117,12 +117,12 @@ function Conf (props) {
     }
     
     return(
-        <databaseContext.Provider value={{conf}}>
+        
             <div className={classes.main}>
                 {renderList()}
                 {renderButtonAdd()}
             </div>       
-        </databaseContext.Provider>
+    
     );
     
 }

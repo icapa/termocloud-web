@@ -4,7 +4,8 @@ import Control from './Control'
 import { withStyles } from '@material-ui/core/styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
-import {useDatabase,useDataBaseSession,databaseContext} from '../Controladores/FirebaseDatabaseContext'
+import {DatabaseContext} from '../Controladores/FirebaseDatabaseContext'
+import {useContext} from 'react';
 
 import {bbddCambiaModo,bbddCambiaTemperaturaObjetivo} from '../Controladores/cloud'
 
@@ -25,7 +26,14 @@ const styles = theme => ({
 function Home(props) {
     /* Properties */
     const { classes } = props;
-    const {id,estado,control,estadoRegistro} = useDatabase()
+   
+    //const {id,estado,control,estadoRegistro} = useContext(DatabaseContext);
+    
+    //const state = useContext(DatabaseContext);
+
+    
+
+    const id=5;
     //const {id,estado,control,estadoRegistro} = useDataBaseSession()
     /* Handlers */
     const onCambiaTemperatura=(temp)=>{
@@ -46,9 +54,13 @@ function Home(props) {
         );
     }
     else{
+        
         return(
-            <databaseContext.Provider value={{id,estado,control,estadoRegistro}}>
-                <main className={classes.main}>
+                <div>Soy HOME</div>
+                /*<main className={classes.main}>
+               
+                
+                {/*
                 <Status estado={estado} registro={estadoRegistro}/>     
                 <Control 
                     estado={estado} 
@@ -56,8 +68,10 @@ function Home(props) {
                     onCambiaTemperatura={onCambiaTemperatura}
                     onCambiaModo={onCambiaModo}
                 />
-                </main>
-            </databaseContext.Provider>
+                 
+
+                </main>*/
+            
         )
     }
 }
