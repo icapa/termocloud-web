@@ -17,7 +17,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 //import InboxIcon from '@material-ui/icons/MoveToInbox';
 //import MailIcon from '@material-ui/icons/Mail';
-import {useSession} from '../Controladores/FirebaseContextUser'
+
 /* Los componentes */
 import Home from './Home'
 import Conf from './Conf'
@@ -26,6 +26,10 @@ import Conf from './Conf'
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
+  main: {
+    paddingLeft:0
+  },
+
   root: {
     display: 'flex',
   },
@@ -65,7 +69,8 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3),
+    padding: theme.spacing(0.5),
+   
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,

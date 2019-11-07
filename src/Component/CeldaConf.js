@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState,useEffect } from 'react';
 
 import { Checkbox,Typography,TextField, Button, InputLabel, Select, IconButton, FormControl, Switch} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
@@ -45,8 +45,11 @@ const styles = theme => ({
 })
 function CeldaConf (props) {
     
-    const [state,setState] = useState(props.estado);
+    const [state,setState] = useState(null);
     
+    useEffect(()=>{
+        setState(props.estado);
+    },[props.estado])
     
     const {classes,onDelete,onSubmit} = props;
     
@@ -55,16 +58,9 @@ function CeldaConf (props) {
 
     /* Handlers */
     const handleTemperatura = event =>{
-        
-        setState( (prevState) =>(
-            {
-                ...prevState,
-                [event.target.name]: event.target.checked,
-                pintaAceptar:true,
-            }
-        ))  
-
-
+        if (isNaN(event.target.value)){
+            return;
+        }
         setState((prevState)=>(
             {
                 ...prevState,
@@ -153,11 +149,10 @@ function CeldaConf (props) {
         
     }
     
-    if (!true){
+    if (!state){
         return(<></>)
     }
     else {
-        console.log("CELDA_CONF: Repinto la puta celda")
         return( 
             <div className={classes.main}>
                 <form onSubmit={handleEvent}>
@@ -230,8 +225,8 @@ function CeldaConf (props) {
                         label="Inicio"
                         type="time"
                         name="hh_ii"
-                        onClick={handleTime('hh_ii')}
-                        defaultValue={state.hh_ii}
+                        onChange={handleTime('hh_ii')}
+                        value={state.hh_ii}
                         className={classes.textField}
                         InputLabelProps={{
                         shrink: true,
@@ -245,8 +240,8 @@ function CeldaConf (props) {
                         label="Fin"
                         type="time"
                         name="hh_ff"
-                        onClick={handleTime('hh_ff')}
-                        defaultValue={state.hh_ff}
+                        onChange={handleTime('hh_ff')}
+                        value={state.hh_ff}
                         className={classes.textField}
                         InputLabelProps={{
                         shrink: true,
@@ -273,7 +268,7 @@ function CeldaConf (props) {
                         type="number"
                         name="temperatura"
                         onChange={handleTemperatura}
-                        defaultValue={state.temperatura}
+                        value={state.temperatura}
                         className={classes.textoTemp}
                         InputLabelProps={{
                         shrink: true,

@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab'
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {useState,useContext} from 'react';
+import {useContext} from 'react';
 import {DatabaseContext} from '../Controladores/FirebaseDatabaseContext'
 import {bbddCambiaConf,bbddDeleteConf,bbddCreaConfiguracion} from '../Controladores/cloud'
 
@@ -81,11 +81,8 @@ function Conf (props) {
             ]
         }
         if (database!==null){
-            console.log("CONF: Nueva configuracion");
-            
             return(
-                <div>
-                    {console.log("CONF: ", database.conf)}
+                <div className={classes.main}>
                     {database.conf.map((c,index) => 
                         
                         <div className={colorCelda.colores[index%2].clase} key={index.toString()}>
