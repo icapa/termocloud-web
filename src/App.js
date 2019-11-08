@@ -15,6 +15,7 @@ import {DatabaseContext,useDatabase} from './Controladores/FirebaseDatabaseConte
 
 var config = require('./config/firebase_conf').firebase
 
+export const version = "1.0";
 
 
 const styles={

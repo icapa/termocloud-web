@@ -6,6 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import PropTypes from 'prop-types';
 import {DatabaseContext} from '../Controladores/FirebaseDatabaseContext'
 import {useContext} from 'react';
+import {version} from '../App';
 
 import {bbddCambiaModo,bbddCambiaTemperaturaObjetivo} from '../Controladores/cloud'
 
@@ -20,6 +21,10 @@ const styles = theme => ({
     separador:{
         align:'center',
         
+    },
+    version:{
+        flex:1,
+        alignItems:'center'
     }
 });
 
@@ -68,6 +73,9 @@ function Home(props) {
                     onCambiaTemperatura={onCambiaTemperatura}
                     onCambiaModo={onCambiaModo}
                 />
+                <div className={classes.version}>
+                    <center>v{version}</center>
+                </div>
                 </main>
             
         )

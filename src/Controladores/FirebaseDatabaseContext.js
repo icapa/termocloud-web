@@ -47,7 +47,7 @@ export const useDatabase= ()=>{
             })
         })
         return (() => {
-            console.log("Database: Salgo");
+            
             if (unEstado) unEstado.off();
             if(unId) unId.off();
             if (unControl) unControl.off();

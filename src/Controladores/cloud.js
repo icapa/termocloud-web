@@ -11,6 +11,7 @@ export  const  getDatabaseId = (handler)=>{
     })  
     return ref;
 }
+
 export const eventoEstado = (id,handler) =>{
     let ref = firebase.database().ref(id+'/estado')
     ref.on("value",(snapshot)=>{
@@ -32,6 +33,23 @@ export const eventoControl = (id,handler) =>{
     })
     return ref;
 }
+export const eventoRegistroYEventos = (tipo,dia,handler) =>{
+    var ref;
+    getDatabaseId((id)=>{
+        ref = firebase.database().ref(id+ '/'+tipo+ '/'+dia+'/');
+        ref.on("value",(snapshot)=>{
+            var auxReg=[];
+            snapshot.forEach(function(child){
+                var item = child.val();
+                item.id = child.key;    
+                auxReg.push(item);
+            });
+            handler(auxReg);
+        })
+        return ref;
+    })
+}
+
 export const eventoConf = (handler) =>{
     var ref;
     getDatabaseId((id)=>{

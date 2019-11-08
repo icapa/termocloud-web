@@ -21,6 +21,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 /* Los componentes */
 import Home from './Home'
 import Conf from './Conf'
+import Registros from './Registros'
 
 
 const drawerWidth = 240;
@@ -93,7 +94,7 @@ export default function PersistentDrawerLeft(props) {
     const [indexPage,setIndexPage] = React.useState(0);
     //const user = useSession();
     
-    const losTabs=['Estado', 'Configuración', 'Registros', 'Consumo','Salir'];
+    const losTabs=['Estado', 'Configuración', 'Eventos', 'Registros','Salir'];
 
     const {onSigOut} = props;
    
@@ -122,6 +123,12 @@ export default function PersistentDrawerLeft(props) {
         }
         else if (indexPage === 1){
             return <Conf/>;
+        }
+        else if (indexPage === 2){
+            return <Registros tipo="eventos"/>
+        }
+        else if (indexPage === 3){
+            return <Registros tipo="registros"/>
         }
         else{
           return "No hay na"
