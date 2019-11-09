@@ -74,6 +74,7 @@ function Home(props) {
                     onCambiaModo={onCambiaModo}
                 />
                 <div className={classes.version}>
+                
                     <center>v{version}</center>
                 </div>
                 </main>

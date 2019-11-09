@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 //import {KeyboardArrowRight,KeyboardArrowLeft, IndeterminateCheckBox} from '@material-ui/icons';
 //import { Typography}from '@material-ui/core'
 
-var moment = require('moment');
+//var moment = require('moment');
 
 const styles = theme => ({
     root: {
@@ -68,11 +68,12 @@ function ItemRegistro(props){
     
     const {classes, item,tipo} = props;
     
-
+    /*
     const MomentoAFecha =  (fecha)=>{
         return fecha.format().split('T')[0];
     }
-
+    */
+   
     const estiloPorEstado = (item)=>{
         if (item.encendido===0){
             if (item.modo==="off"){

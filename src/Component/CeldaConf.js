@@ -3,7 +3,7 @@ import React, { useState,useEffect } from 'react';
 import { Checkbox,Typography,TextField, Button, InputLabel, Select, IconButton, FormControl, Switch} from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 import Delete from '@material-ui/icons/Delete'
-import PropTypes from 'prop-types';
+
 
 const styles = theme => ({
     main:{
@@ -166,9 +166,6 @@ function CeldaConf (props) {
                         name="L"
                         />
                     </div>
-           
-        
-            
                     <div className={classes.dia}>
                         <Typography>M</Typography>
                         <Checkbox
@@ -260,8 +257,8 @@ function CeldaConf (props) {
                         <option value="automatico">Auto</option>
                     </Select>
                     </FormControl>
-                    
-                    <TextField
+                    {state.estadoForm!=="off" && (
+                        <TextField
                         id="time"
                         label="Temp"
                         maxlenght="3"
@@ -274,10 +271,10 @@ function CeldaConf (props) {
                         shrink: true,
                         }}
                         inputProps={{
-                        step: 1, // 5 min
+                            step: 1, // 5 min
                         }}
-                    />
-                    
+                        />                    
+                    )}
                     </div>
                     <div className={classes.lista}>
                     
