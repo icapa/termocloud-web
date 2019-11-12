@@ -39,7 +39,6 @@ function DiaRegistro(props){
 
     function MomentoAFecha(){
         return fecha.format().split('T')[0];
-        //fecha.format().split('T')[0]
     }
 
     function sumaDia(){

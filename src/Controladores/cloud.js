@@ -101,3 +101,37 @@ export const bbddCreaConfiguracion = (conf) =>{
         firebase.database().ref().update(updates);
     })
 }
+
+export const bbddGetLastItemFromEvent = (dia,handler) =>{
+    getDatabaseId((id)=>{
+        let ref = firebase.database().ref(id+'/eventos/'+dia);
+        ref.limitToLast(1).once("value",(snapshot)=>{
+            snapshot.forEach(function(child){
+                var item = child.val();
+                item.key = child.key;
+                console.log("bbddGetLastItemFromEvent: ");
+                console.log(item);
+                if (handler){
+                    handler(item);
+                }
+            })
+        
+        })
+    })
+}
+
+export const bbddGetAllEvents = (dia,handler) =>{
+    getDatabaseId((id)=>{
+        const ref = firebase.database().ref(id+ '/eventos/'+dia);
+        ref.on("value",(snapshot)=>{
+            var auxReg=[];
+            snapshot.forEach(function(child){
+                var item = child.val();
+                item.id = child.key;    
+                auxReg.push(item);
+            });
+            handler(auxReg);
+        })
+    })
+}
+
