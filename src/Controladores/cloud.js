@@ -106,17 +106,12 @@ export const bbddGetLastItemFromEvent = (dia,handler) =>{
     getDatabaseId((id)=>{
         let ref = firebase.database().ref(id+'/eventos/'+dia);
         ref.limitToLast(1).once("value",(snapshot)=>{
-            snapshot.forEach(function(child){
-                var item = child.val();
-                item.key = child.key;
-                console.log("bbddGetLastItemFromEvent: ");
-                console.log(item);
-                if (handler){
-                    handler(item);
+            const item=Object.values(snapshot.val())[0];
+            if (handler){
+                handler(item);
                 }
-            })
-        
-        })
+            }
+        )
     })
 }
 

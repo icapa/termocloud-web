@@ -8,7 +8,6 @@ export const consumoGetTotal=(inicio,listaHoras)=>{
     var finCuenta=null;
 
     listaHoras.forEach( (element,index,array) => {
-        debugger;
        if (index===0){  // Primer item de la lista
             if (encendidoAnterior===1){    // Partiamos de encendido, ponemos en 00
                 inicioCuenta="00:00:00";    
@@ -16,13 +15,18 @@ export const consumoGetTotal=(inicio,listaHoras)=>{
         }
         if (element.encendido !== encendidoAnterior){   // Cambio con el item anterior
             if (element.encendido===1){                 // Y en este caso es encendido, antes apagado
-                inicioCuenta=element.key;               // Guardo el inicio de cuenta    
+                inicioCuenta=element.id;               // Guardo el inicio de cuenta    
             }
             else{                                       // Es apagado, antes era encendido
-                finCuenta=element.key;                  // Guardo el fin de la cuenta
+                finCuenta=element.id;                  // Guardo el fin de la cuenta
             }
         }
+        encendidoAnterior=element.encendido;
         consumoSegundos += consumoIncrementoTiempo(inicioCuenta,finCuenta);
+        if (inicioCuenta && finCuenta){
+            inicioCuenta=null;
+            finCuenta=null;
+        }
     });
     return consumoSegundos;
 }
@@ -31,8 +35,8 @@ const consumoIncrementoTiempo= (horaInicial,horaFinal)=>{
     var iniMoment,finMoment,difMoment;
     if (!horaInicial || !horaFinal) // Si no son intervalos correctos devolvemos 0
         return 0;
-    iniMoment=moment(iniMoment);
-    finMoment=moment(finMoment);
-    difMoment=finMoment.diff(iniMoment);
+    iniMoment=moment('2000-01-01 '+horaInicial);
+    finMoment=moment('2000-01-01 '+horaFinal);
+    difMoment=moment.duration(finMoment.diff(iniMoment));
     return difMoment.as('seconds');
 }

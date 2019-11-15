@@ -3,6 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import {IconButton} from '@material-ui/core';
 import {KeyboardArrowRight,KeyboardArrowLeft} from '@material-ui/icons';
 import { Typography}from '@material-ui/core'
+import {MomentoAFecha} from '../Controladores/Fechas'
 
 var moment = require('moment');
 
@@ -37,22 +38,22 @@ function DiaRegistro(props){
 
    
 
-    function MomentoAFecha(){
-        return fecha.format().split('T')[0];
-    }
+    
 
     function sumaDia(){
         setCount(count+1);
-        setFecha(fecha.add(1,'days'));
+        const newFecha = fecha.add(+1,'days')
+        setFecha(newFecha);
         if (onUpdate){
-            onUpdate(MomentoAFecha());
+            onUpdate(MomentoAFecha(newFecha));
         }
     }
     function restaDia(){    
         setCount(count-1);
-        setFecha(fecha.add(-1,'days'));
+        const newFecha = fecha.add(-1,'days')
+        setFecha(newFecha);
         if (onUpdate){
-            onUpdate(MomentoAFecha());
+            onUpdate(MomentoAFecha(newFecha));
         }
 
     }
@@ -62,7 +63,7 @@ function DiaRegistro(props){
             <IconButton onClick={restaDia}>
                 <KeyboardArrowLeft/>
             </IconButton>
-            <Typography variant='h5'>{MomentoAFecha()}</Typography>
+            <Typography variant='h5'>{MomentoAFecha(fecha)}</Typography>
             <IconButton onClick={sumaDia}>
                 <KeyboardArrowRight />
             </IconButton>

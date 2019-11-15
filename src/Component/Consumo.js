@@ -6,6 +6,7 @@ import DiaRegistro from './DiaRegistro'
 import {bbddGetLastItemFromEvent,bbddGetAllEvents} from '../Controladores/cloud';
 import {MomentoAFecha,FechaAMomento} from '../Controladores/Fechas';
 import {consumoGetTotal} from '../Controladores/ConsumoControl';
+import { DeviceBluetoothDisabled } from 'material-ui/svg-icons';
 
 var moment = require('moment');
 
@@ -32,46 +33,58 @@ const styles = theme => ({
 function Consumo(props){
     
     const {classes} = props;
-    const [estadoFecha,setEstadoFecha] = useState(moment().format().split('T')[0]);
-    const [estadoCaleAnterior,setEstadoCaleAnterior] = useState(null);
-    const [estadoConsumo,setEstadoConsumo] = useState(0);
+    const [estadoFecha,setEstadoFecha] = useState(null);
+    const [estadoConsumo,setEstadoConsumo] = useState(null);
 
     useEffect(() =>{
-        const fecha=moment();
+        const fecha=MomentoAFecha(moment());
         setEstadoFecha(fecha);
-        console.log("Registros: Primer paso");
     },[]);
-
-    useEffect(()=>{
-        console.log("Consumo:Cambiaron los estados, consumo: " + estadoConsumo);
-        debugger;
-        if (estadoCaleAnterior){
-            bbddGetAllEvents(estadoFecha,(items)=>{
-                const con=consumoGetTotal(estadoCaleAnterior,items);
-                setEstadoConsumo(con);
-            })
-        }
-    },[estadoFecha,estadoCaleAnterior]);
+    
+    useEffect(()=>{  
+        if (estadoFecha===null) return;
+        const diaAntes=FechaAMomento(estadoFecha).add(-1,'days');
+        console.log("Consumo: Cambiamos dia " + estadoFecha);
+        console.log(diaAntes);
+        console.log(MomentoAFecha(diaAntes));
+        bbddGetLastItemFromEvent( MomentoAFecha(diaAntes),(item)=>{
+            if (item){
+                console.log("Consumo, item anterior:" + item.encendido);
+                bbddGetAllEvents(estadoFecha,(items)=>{
+                    const con=consumoGetTotal(item.encendido,items);
+                    setEstadoConsumo(con);
+                    console.log("Consumo:Cambiaron los estados, consumo: " + con);
+                })
+            }
+            
+        });
+    },[estadoFecha]);
     
     
     
 
-    const handleDia = (dia)=>{
-        console.log(dia);
+    const handleDia = (dia)=>{    
+        setEstadoFecha(dia);
+        /*
         const diaAntes=FechaAMomento(dia).add(-1,'days');
         console.log("Consumo: Cambiamos dia " + dia);
         console.log(diaAntes);
         console.log(MomentoAFecha(diaAntes));
-        setEstadoFecha(dia);
-        bbddGetLastItemFromEvent(MomentoAFecha(diaAntes),(item)=>{
-            console.log("Consumo, item anterior:" + item.encendido);
-            setEstadoConsumo(0);
-            setEstadoCaleAnterior(item.encendido);
+        bbddGetLastItemFromEvent( MomentoAFecha(diaAntes),(item)=>{
+            if (item){
+                console.log("Consumo, item anterior:" + item.encendido);
+                setEstadoCaleAnterior(item.encendido);
+            }
+            setEstadoFecha(dia);
         });
+        */
         
     }
     return (
+        <div>
         <DiaRegistro onUpdate={handleDia}/>
+            {estadoConsumo!==null && (<h1>{estadoConsumo} segundos</h1>)}
+        </div>
     )
 }
 
