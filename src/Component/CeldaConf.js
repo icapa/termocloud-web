@@ -61,14 +61,15 @@ function CeldaConf (props) {
         if (isNaN(event.target.value)){
             return;
         }
-        setState((prevState)=>(
-            {
-                ...prevState,
-                temperatura:event.target.value,
-                pintaAceptar:true
-            }
-        ))
-        
+
+        event.persist()
+        var oldState = state;
+        oldState = {
+            ...state,
+            pintaAceptar:true,
+            temperatura:event.target.value,
+        }
+        setState(oldState);
     }
     
     const handleDelete= () =>{
@@ -90,7 +91,16 @@ function CeldaConf (props) {
         
     }
     const handleTime = name => event =>{
-        
+        event.persist()
+        var oldState = state;
+        oldState = {
+            ...state,
+            pintaAceptar:true,
+            [name]:event.target.value,
+        }
+        setState(oldState);
+
+        /*
         setState((prevState)=>(
             {
                 ...prevState, 
@@ -98,6 +108,7 @@ function CeldaConf (props) {
                 [name]: event.target.value,
             }
         ));
+        */
         
     }
 
