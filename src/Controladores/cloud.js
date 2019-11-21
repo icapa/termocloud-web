@@ -1,6 +1,6 @@
 
 import * as firebase from 'firebase'
-
+import {MomentoAFecha} from './Fechas'
 
 export  const  getDatabaseId = (handler)=>{
     let ref = firebase.database().ref()
@@ -106,9 +106,14 @@ export const bbddGetLastItemFromEvent = (dia,handler) =>{
     getDatabaseId((id)=>{
         let ref = firebase.database().ref(id+'/eventos/'+dia);
         ref.limitToLast(1).once("value",(snapshot)=>{
-            const item=Object.values(snapshot.val())[0];
-            if (handler){
-                handler(item);
+            if (snapshot.val() === null){
+                handler(null);
+            }
+            else{
+                const item=Object.values(snapshot.val())[0];
+                if (handler){
+                    handler(item);
+                    }
                 }
             }
         )
@@ -130,3 +135,13 @@ export const bbddGetAllEvents = (dia,handler) =>{
     })
 }
 
+export const bbddGetAllEventsAndInit=(mDia,handler) =>{
+    const diaHoy = MomentoAFecha(mDia);
+    const diaAntes=mDia.add(-1,'days');
+    bbddGetLastItemFromEvent( MomentoAFecha(diaAntes),(item)=>{
+        const itemAnt=item;
+        bbddGetAllEvents(diaHoy,(items)=>{
+            itemAnt === null ? handler(0,items) : handler(itemAnt.encendido,items);
+        })            
+    })
+}

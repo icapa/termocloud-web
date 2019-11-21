@@ -3,7 +3,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from 'react';
 import DiaRegistro from './DiaRegistro'
 
-import {bbddGetLastItemFromEvent,bbddGetAllEvents} from '../Controladores/cloud';
+import {bbddGetAllEventsAndInit} from '../Controladores/cloud';
 import {MomentoAFecha,FechaAMomento} from '../Controladores/Fechas';
 import {consumoGetTotal} from '../Controladores/ConsumoControl';
 import { DeviceBluetoothDisabled } from 'material-ui/svg-icons';
@@ -43,46 +43,18 @@ function Consumo(props){
     
     useEffect(()=>{  
         if (estadoFecha===null) return;
-        const diaAntes=FechaAMomento(estadoFecha).add(-1,'days');
         console.log("Consumo: Cambiamos dia " + estadoFecha);
-        console.log(diaAntes);
-        console.log(MomentoAFecha(diaAntes));
-        bbddGetLastItemFromEvent( MomentoAFecha(diaAntes),(item)=>{
-            if (item){
-                console.log("Consumo, item anterior:" + item.encendido);
-                bbddGetAllEvents(estadoFecha,(items)=>{
-                    const con=consumoGetTotal(item.encendido,items);
-                    setEstadoConsumo(con);
-                    console.log("Consumo:Cambiaron los estados, consumo: " + con);
-                })
-            }
-            
-        });
+        bbddGetAllEventsAndInit(FechaAMomento(estadoFecha),(inicio,items)=>{
+            const con = consumoGetTotal(inicio,items);
+            setEstadoConsumo(con);
+        })
     },[estadoFecha]);
-    
-    
-    
-
     const handleDia = (dia)=>{    
         setEstadoFecha(dia);
-        /*
-        const diaAntes=FechaAMomento(dia).add(-1,'days');
-        console.log("Consumo: Cambiamos dia " + dia);
-        console.log(diaAntes);
-        console.log(MomentoAFecha(diaAntes));
-        bbddGetLastItemFromEvent( MomentoAFecha(diaAntes),(item)=>{
-            if (item){
-                console.log("Consumo, item anterior:" + item.encendido);
-                setEstadoCaleAnterior(item.encendido);
-            }
-            setEstadoFecha(dia);
-        });
-        */
-        
     }
     return (
         <div>
-        <DiaRegistro onUpdate={handleDia}/>
+            <DiaRegistro onUpdate={handleDia}/>
             {estadoConsumo!==null && (<h1>{estadoConsumo} segundos</h1>)}
         </div>
     )
