@@ -44,10 +44,17 @@ function Consumo(props){
     useEffect(()=>{  
         if (estadoFecha===null) return;
         console.log("Consumo: Cambiamos dia " + estadoFecha);
+        /*
         bbddGetAllEventsAndInit(FechaAMomento(estadoFecha),(inicio,items)=>{
             const con = consumoGetTotal(inicio,items);
             setEstadoConsumo(con);
         })
+        */
+       bbddGetAllEventsAndInit(FechaAMomento(estadoFecha))
+       .then((resp)=>{
+            const con = consumoGetTotal(resp.inicio,resp.items);
+            setEstadoConsumo(con);
+       })
     },[estadoFecha]);
     const handleDia = (dia)=>{    
         setEstadoFecha(dia);

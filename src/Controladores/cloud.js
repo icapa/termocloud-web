@@ -134,14 +134,17 @@ export const bbddGetAllEvents = (dia,handler) =>{
         })
     })
 }
-
-export const bbddGetAllEventsAndInit=(mDia,handler) =>{
-    const diaHoy = MomentoAFecha(mDia);
-    const diaAntes=mDia.add(-1,'days');
-    bbddGetLastItemFromEvent( MomentoAFecha(diaAntes),(item)=>{
-        const itemAnt=item;
-        bbddGetAllEvents(diaHoy,(items)=>{
-            itemAnt === null ? handler(0,items) : handler(itemAnt.encendido,items);
-        })            
+export const bbddGetAllEventsAndInit=(mDia) =>{
+    var promesa = new Promise ((resolve,reject)=>{
+        const diaHoy = MomentoAFecha(mDia);
+        const diaAntes=mDia.add(-1,'days');
+        bbddGetLastItemFromEvent( MomentoAFecha(diaAntes),(item)=>{
+            const itemAnt=item;
+            bbddGetAllEvents(diaHoy,(items)=>{
+                itemAnt === null ? resolve({inicio:0,items: items}) : resolve({inicio:itemAnt.encendido,items:items});
+            })            
+        })
     })
+    return promesa;
 }
+
