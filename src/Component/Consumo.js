@@ -3,9 +3,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from 'react';
 import DiaRegistro from './DiaRegistro'
 
-import {bbddGetAllEventsAndInit} from '../Controladores/cloud';
 import {MomentoAFecha,FechaAMomento} from '../Controladores/Fechas';
-import {consumoGetTotal} from '../Controladores/ConsumoControl';
+import {consumoPorDia} from '../Controladores/ConsumoControl';
 import { DeviceBluetoothDisabled } from 'material-ui/svg-icons';
 
 var moment = require('moment');
@@ -44,18 +43,10 @@ function Consumo(props){
     useEffect(()=>{  
         if (estadoFecha===null) return;
         console.log("Consumo: Cambiamos dia " + estadoFecha);
-        /*
-        bbddGetAllEventsAndInit(FechaAMomento(estadoFecha),(inicio,items)=>{
-            const con = consumoGetTotal(inicio,items);
-            setEstadoConsumo(con);
-        })
-        */
-       bbddGetAllEventsAndInit(FechaAMomento(estadoFecha))
-       .then((resp)=>{
-            const con = consumoGetTotal(resp.inicio,resp.items);
-            setEstadoConsumo(con);
-       })
+        consumoPorDia(estadoFecha)
+        .then(consumo => setEstadoConsumo(consumo))
     },[estadoFecha]);
+    
     const handleDia = (dia)=>{    
         setEstadoFecha(dia);
     }

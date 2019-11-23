@@ -1,5 +1,8 @@
 /* Modulo para calcular el consumo */
-var moment = require('moment');
+import {bbddGetAllEventsAndInit} from './cloud';
+import {FechaAMomento} from './Fechas';
+ var moment = require('moment');
+
 
 export const consumoGetTotal=(inicio,listaHoras)=>{
     var consumoSegundos=0;
@@ -40,3 +43,17 @@ const consumoIncrementoTiempo= (horaInicial,horaFinal)=>{
     difMoment=moment.duration(finMoment.diff(iniMoment));
     return difMoment.as('seconds');
 }
+
+export const consumoPorDia = (dia) =>{
+    var promesa = new Promise((resolve,reject)=>{
+        bbddGetAllEventsAndInit(FechaAMomento(dia))
+        .then((resp)=>{
+            const con = consumoGetTotal(resp.inicio,resp.items);
+            resolve(con);
+        })
+    })    
+    return promesa;
+}
+
+
+
