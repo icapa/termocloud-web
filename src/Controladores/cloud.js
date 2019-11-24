@@ -148,3 +148,8 @@ export const bbddGetAllEventsAndInit=(mDia) =>{
     return promesa;
 }
 
+export const bbddGetAllDaysOfMonth=(fromDia,toDia) =>{
+    return new Promise ((resolve,reject) => {
+    
+    })
+}

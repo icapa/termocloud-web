@@ -1,10 +1,10 @@
 /* Modulo para calcular el consumo */
 import {bbddGetAllEventsAndInit} from './cloud';
-import {FechaAMomento} from './Fechas';
+import {FechaAMomento,MomentoAFecha} from './Fechas';
  var moment = require('moment');
 
 
-export const consumoGetTotal=(inicio,listaHoras)=>{
+const consumoGetTotal=(inicio,listaHoras)=>{
     var consumoSegundos=0;
     var encendidoAnterior=inicio;
     var inicioCuenta=null;
@@ -44,7 +44,7 @@ const consumoIncrementoTiempo= (horaInicial,horaFinal)=>{
     return difMoment.as('seconds');
 }
 
-export const consumoPorDia = (dia) =>{
+const consumoPorDia = (dia) =>{
     var promesa = new Promise((resolve,reject)=>{
         bbddGetAllEventsAndInit(FechaAMomento(dia))
         .then((resp)=>{
@@ -54,6 +54,30 @@ export const consumoPorDia = (dia) =>{
     })    
     return promesa;
 }
+
+export const consumoEnIntervalo = (fechaInicial,fechaFinal) => {
+    return new Promise((resolve,reject)=>{
+        const inicio = FechaAMomento(fechaInicial);
+        const final = FechaAMomento(fechaFinal);
+        const diffMoment = moment.duration(final.diff(inicio));
+        const dias = diffMoment.as("days");
+        var i=0;
+        var listaFechas=[];
+        for (i===0;i<=dias;i++){
+            listaFechas.push(MomentoAFecha(inicio));
+            inicio.add(+1,'day');
+        }
+        Promise.all(listaFechas.map(consumoPorDia))
+        .then(valores=>{
+            var arrayCompleto=[];
+            valores.forEach((element,index) => {
+            arrayCompleto.push({X:listaFechas[index], Y:element});
+            });
+            resolve(arrayCompleto); 
+        })
+    })
+}
+
 
 
 

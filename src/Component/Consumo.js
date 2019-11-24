@@ -4,7 +4,7 @@ import Typography from 'react';
 import DiaRegistro from './DiaRegistro'
 
 import {MomentoAFecha,FechaAMomento} from '../Controladores/Fechas';
-import {consumoPorDia} from '../Controladores/ConsumoControl';
+import {consumoEnIntervalo} from '../Controladores/ConsumoControl';
 import { DeviceBluetoothDisabled } from 'material-ui/svg-icons';
 
 var moment = require('moment');
@@ -43,8 +43,8 @@ function Consumo(props){
     useEffect(()=>{  
         if (estadoFecha===null) return;
         console.log("Consumo: Cambiamos dia " + estadoFecha);
-        consumoPorDia(estadoFecha)
-        .then(consumo => setEstadoConsumo(consumo))
+        consumoEnIntervalo(estadoFecha,estadoFecha)
+        .then(consumo => setEstadoConsumo(consumo[0].Y))
     },[estadoFecha]);
     
     const handleDia = (dia)=>{    
