@@ -5,7 +5,10 @@ import DiaRegistro from './DiaRegistro'
 
 import {MomentoAFecha,FechaAMomento} from '../Controladores/Fechas';
 import {consumoEnIntervalo} from '../Controladores/ConsumoControl';
-import { DeviceBluetoothDisabled } from 'material-ui/svg-icons';
+import {DateRange} from 'react-date-range'
+import {
+    BarChart, Bar, LabelList,Label, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
+  } from 'recharts';
 
 var moment = require('moment');
 
@@ -43,17 +46,51 @@ function Consumo(props){
     useEffect(()=>{  
         if (estadoFecha===null) return;
         console.log("Consumo: Cambiamos dia " + estadoFecha);
-        consumoEnIntervalo(estadoFecha,estadoFecha)
-        .then(consumo => setEstadoConsumo(consumo[0].Y))
+        consumoEnIntervalo(estadoFecha.inicio,estadoFecha.final)
+        .then((consumo)=>{
+            setEstadoConsumo(consumo)
+        })
     },[estadoFecha]);
     
-    const handleDia = (dia)=>{    
-        setEstadoFecha(dia);
+
+
+    const handleDia = (dia)=>{  
+        setEstadoFecha({
+            inicio:MomentoAFecha(dia.startDate),
+            final:MomentoAFecha(dia.endDate)
+        });
     }
     return (
+
         <div>
-            <DiaRegistro onUpdate={handleDia}/>
-            {estadoConsumo!==null && (<h1>{estadoConsumo} segundos</h1>)}
+            <DateRange
+                firstDayOfWeek = {1}
+                lang = "es"
+                calendars = "1"
+                onInit = {handleDia}
+                onChange = {handleDia}
+            />
+            {/*estadoConsumo!==null && (<h1>{estadoConsumo} segundos</h1>)*/}
+            <BarChart
+                width={300}
+                height={250}
+                data={estadoConsumo}
+                margin={{
+                top: 15, right: 0, left: 0, bottom: 5,
+                }}
+            >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="X" />
+                <YAxis dataKey="Y"/>
+                <Label offset={0} position="center"/>
+                <Tooltip />
+                <Bar dataKey="Y" fill="#8884d8">
+                    {/*
+                    <LabelList dataKey="Y" position="top" />
+                    */}
+                    
+                </Bar>
+            </BarChart>
         </div>
     )
 }
